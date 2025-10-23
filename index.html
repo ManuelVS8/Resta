@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resta con Llevadas - Método Ascensor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: #7c3aed;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+
+        .help-button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto 2rem;
+            transition: background-color 0.3s;
+        }
+
+        .help-button:hover {
+            background-color: #2563eb;
+        }
+
+        .help-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #93c5fd;
+            display: none;
+        }
+
+        .help-box.visible {
+            display: block;
+        }
+
+        .help-box h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 1rem;
+        }
+
+        .help-box ol {
+            padding-left: 1.5rem;
+            color: #374151;
+        }
+
+        .help-box li {
+            margin-bottom: 0.5rem;
+        }
+
+        .game-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .operation-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .operation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-family: 'Courier New', monospace;
+            font-size: 2.5rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .digit-box {
+            width: 4rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .carry-mark {
+            position: absolute;
+            bottom: 0.25rem;
+            left: 0.25rem;
+            color: #ef4444;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .line {
+            width: 4rem;
+            border-top: 4px solid #1f2937;
+        }
+
+        .answer-box {
+            width: 4rem;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            background-color: #f9fafb;
+            transition: all 0.3s;
+        }
+
+        .answer-box.current {
+            border-color: #a855f7;
+            background-color: #faf5ff;
+            transform: scale(1.1);
+        }
+
+        .answer-box.filled {
+            border-color: #4ade80;
+            background-color: #f0fdf4;
+            cursor: pointer;
+        }
+
+        .answer-box.filled:hover {
+            background-color: #dcfce7;
+        }
+
+        .arrow-container {
+            margin-left: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .arrow {
+            width: 4rem;
+            height: 4rem;
+            color: #7c3aed;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .arrow-text {
+            color: #7c3aed;
+            font-weight: bold;
+            font-size: 0.875rem;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .question-box {
+            background-color: #fef9c3;
+            border: 2px solid #facc15;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .question-box.visible {
+            display: block;
+        }
+
+        .question-box p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #854d0e;
+            margin-bottom: 1rem;
+        }
+
+        .question-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-yes {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-no {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .btn-no:hover {
+            background-color: #dc2626;
+        }
+
+        .number-bank {
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .number-bank.visible {
+            display: block;
+        }
+
+        .number-bank p {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            max-width: 48rem;
+            margin: 0 auto;
+        }
+
+        .number-btn {
+            background-color: #a855f7;
+            color: white;
+            width: 4rem;
+            height: 4rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .number-btn:hover {
+            background-color: #9333ea;
+            transform: scale(1.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .action-buttons.visible {
+            display: flex;
+        }
+
+        .btn-check {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-check:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-next {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-retry {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-retry:hover {
+            background-color: #4b5563;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: none;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .feedback.success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .feedback.error {
+            background-color: #fed7aa;
+            color: #9a3412;
+        }
+
+        .manual-button {
+            background-color: #6366f1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+
+        .manual-button:hover {
+            background-color: #4f46e5;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧮 Resta con Llevadas - Método Ascensor</h1>
+        <p class="subtitle">Como un ascensor: si no puedes restar, ¡sube una planta! (suma 10)</p>
+        
+        <div class="text-center">
+            <button class="help-button" onclick="toggleHelp()">
+                <span>❓</span>
+                <span id="helpButtonText">Mostrar ayuda</span>
+            </button>
+        </div>
+
+        <div id="helpBox" class="help-box">
+            <h2>📚 Cómo jugar:</h2>
+            <ol>
+                <li>Empieza por la columna de las unidades (derecha)</li>
+                <li>Si no puedes restar porque el número de arriba es menor, "sube en el ascensor" (suma 10)</li>
+                <li>Haz clic en el número correcto del banco de números</li>
+                <li>Responde si te llevas 1 para la siguiente columna (aparecerá un 1 pequeño delante)</li>
+                <li>Si te llevas 1, recuerda sumarlo a la cifra del sustraendo en la siguiente columna</li>
+                <li>Continúa hasta completar toda la resta</li>
+                <li>¡Comprueba tu respuesta al final!</li>
+            </ol>
+        </div>
+
+        <div class="game-box">
+            <div class="operation-container">
+                <div class="operation">
+                    <div id="minuendRow" class="row"></div>
+                    <div id="subtrahendRow" class="row"></div>
+                    <div id="lineRow" class="row"></div>
+                    <div id="answerRow" class="row"></div>
+                </div>
+                <div class="arrow-container">
+                    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <path d="M12 19V5M5 12l7-7 7 7"/>
+                    </svg>
+                    <p class="arrow-text">Sube el<br/>ascensor</p>
+                </div>
+            </div>
+
+            <div id="questionBox" class="question-box">
+                <p>¿Te llevas 1 para la siguiente columna?</p>
+                <div class="question-buttons">
+                    <button class="btn btn-yes" onclick="handleCarry(true)">Sí, me llevo 1</button>
+                    <button class="btn btn-no" onclick="handleCarry(false)">No, continúo</button>
+                </div>
+            </div>
+
+            <div id="numberBank" class="number-bank">
+                <p>Banco de números (haz clic para colocar):</p>
+                <div class="numbers" id="numbers"></div>
+            </div>
+
+            <div id="actionButtons" class="action-buttons">
+                <button id="checkButton" class="btn btn-check" onclick="checkAnswer()">
+                    <span>✓</span> Comprobar
+                </button>
+                <button id="nextButton" class="btn btn-next" onclick="generateNewOperation()" style="display: none;">
+                    <span>→</span> Siguiente
+                </button>
+                <button class="btn btn-retry" onclick="reset()">
+                    <span>↻</span> Reintentar
+                </button>
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <div class="text-center">
+            <button class="manual-button" onclick="changeOperation()">Cambiar operación manualmente</button>
+        </div>
+    </div>
+
+    <script>
+        var minuend = '23456';
+        var subtrahend = '16387';
+        var userAnswer = {};
+        var carries = {};
+        var currentColumn = 0;
+        var showCarryQuestion = false;
+        var gameStarted = false;
+        var isChecked = false;
+
+        function init() {
+            renderOperation();
+            renderNumberBank();
+        }
+
+        function toggleHelp() {
+            var helpBox = document.getElementById('helpBox');
+            var buttonText = document.getElementById('helpButtonText');
+            helpBox.classList.toggle('visible');
+            buttonText.textContent = helpBox.classList.contains('visible') ? 'Ocultar ayuda' : 'Mostrar ayuda';
+        }
+
+        function renderOperation() {
+            var numDigits = Math.max(minuend.length, subtrahend.length);
+            
+            var minuendRow = document.getElementById('minuendRow');
+            minuendRow.innerHTML = '';
+            for (var i = 0; i < minuend.length; i++) {
+                var div = document.createElement('div');
+                div.className = 'digit-box';
+                div.textContent = minuend[i];
+                minuendRow.appendChild(div);
+            }
+
+            var subtrahendRow = document.getElementById('subtrahendRow');
+            subtrahendRow.innerHTML = '<div class="digit-box">−</div>';
+            for (var i = 0; i < subtrahend.length; i++) {
+                var reverseIdx = numDigits - 1 - i;
+                var div = document.createElement('div');
+                div.className = 'digit-box';
+                div.id = 'sub-' + i;
+                div.textContent = subtrahend[i];
+                
+                if (carries[reverseIdx]) {
+                    var carry = document.createElement('span');
+                    carry.className = 'carry-mark';
+                    carry.textContent = '1';
+                    div.appendChild(carry);
+                }
+                
+                subtrahendRow.appendChild(div);
+            }
+
+            var lineRow = document.getElementById('lineRow');
+            lineRow.innerHTML = '<div class="line"></div>';
+            for (var i = 0; i < numDigits; i++) {
+                var div = document.createElement('div');
+                div.className = 'line';
+                lineRow.appendChild(div);
+            }
+
+            var answerRow = document.getElementById('answerRow');
+            answerRow.innerHTML = '<div class="digit-box"></div>';
+            for (var i = 0; i < numDigits; i++) {
+                var reverseIdx = numDigits - 1 - i;
+                var div = document.createElement('div');
+                div.className = 'answer-box';
+                div.id = 'ans-' + i;
+                
+                if (currentColumn === reverseIdx && gameStarted) {
+                    div.classList.add('current');
+                }
+                
+                if (userAnswer[reverseIdx] !== undefined) {
+                    div.textContent = userAnswer[reverseIdx];
+                    div.classList.add('filled');
+                    div.onclick = (function(idx) {
+                        return function() {
+                            deleteAnswer(idx);
+                        };
+                    })(reverseIdx);
+                }
+                
+                answerRow.appendChild(div);
+            }
+
+            updateUI();
+        }
+
+        function renderNumberBank() {
+            var numbers = document.getElementById('numbers');
+            numbers.innerHTML = '';
+            for (var i = 0; i <= 9; i++) {
+                var btn = document.createElement('button');
+                btn.className = 'number-btn';
+                btn.textContent = i;
+                btn.onclick = (function(num) {
+                    return function() {
+                        handleNumberClick(num);
+                    };
+                })(i);
+                numbers.appendChild(btn);
+            }
+        }
+
+        function handleNumberClick(num) {
+            if (!gameStarted) {
+                gameStarted = true;
+            }
+            
+            var numDigits = Math.max(minuend.length, subtrahend.length);
+            if (currentColumn >= numDigits) return;
+            
+            userAnswer[currentColumn] = num;
+            
+            if (currentColumn < numDigits - 1) {
+                showCarryQuestion = true;
+            } else {
+                currentColumn++;
+            }
+            
+            renderOperation();
+        }
+
+        function handleCarry(hasCarry) {
+            if (hasCarry) {
+                var nextColumn = currentColumn + 1;
+                carries[nextColumn] = true;
+            }
+            showCarryQuestion = false;
+            currentColumn++;
+            renderOperation();
+        }
+
+        function deleteAnswer(idx) {
+            delete userAnswer[idx];
+            delete carries[idx + 1];
+            currentColumn = idx;
+            showCarryQuestion = false;
+            isChecked = false;
+            document.getElementById('feedback').classList.remove('visible');
+            renderOperation();
+        }
+
+        function checkAnswer() {
+            var numDigits = Math.max(minuend.length, subtrahend.length);
+            var correctAnswer = (parseInt(minuend) - parseInt(subtrahend)).toString();
+            while (correctAnswer.length < numDigits) {
+                correctAnswer = '0' + correctAnswer;
+            }
+            
+            var userAnswerString = '';
+            for (var i = numDigits - 1; i >= 0; i--) {
+                userAnswerString += userAnswer[i] || '';
+            }
+            
+            var feedback = document.getElementById('feedback');
+            if (userAnswerString === correctAnswer) {
+                feedback.textContent = '¡Excelente! La respuesta es correcta. 🎉';
+                feedback.className = 'feedback success visible';
+            } else {
+                feedback.textContent = 'Ups, revisa tu respuesta. Inténtalo de nuevo.';
+                feedback.className = 'feedback error visible';
+            }
+            
+            isChecked = true;
+            updateUI();
+        }
+
+        function generateNewOperation() {
+            var digits = Math.floor(Math.random() * 2) + 4;
+            var max = Math.pow(10, digits) - 1;
+            var min = Math.pow(10, digits - 1);
+            
+            var newMinuend = Math.floor(Math.random() * (max - min + 1)) + min;
+            var newSubtrahend = Math.floor(Math.random() * (max - min + 1)) + min;
+            
+            if (newMinuend < newSubtrahend) {
+                var temp = newMinuend;
+                newMinuend = newSubtrahend;
+                newSubtrahend = temp;
+            }
+            
+            minuend = newMinuend.toString();
+            subtrahend = newSubtrahend.toString();
+            reset();
+        }
+
+        function reset() {
+            userAnswer = {};
+            carries = {};
+            currentColumn = 0;
+            showCarryQuestion = false;
+            gameStarted = false;
+            isChecked = false;
+            document.getElementById('feedback').classList.remove('visible');
+            renderOperation();
+        }
+
+        function changeOperation() {
+            var newMinuend = prompt('Introduce el minuendo:', minuend);
+            var newSubtrahend = prompt('Introduce el sustraendo:', subtrahend);
+            if (newMinuend && newSubtrahend) {
+                minuend = newMinuend;
+                subtrahend = newSubtrahend;
+                reset();
+            }
+        }
+
+        function updateUI() {
+            var numDigits = Math.max(minuend.length, subtrahend.length);
+            var questionBox = document.getElementById('questionBox');
+            var numberBank = document.getElementById('numberBank');
+            var actionButtons = document.getElementById('actionButtons');
+            var checkButton = document.getElementById('checkButton');
+            var nextButton = document.getElementById('nextButton');
+            
+            if (showCarryQuestion) {
+                questionBox.classList.add('visible');
+            } else {
+                questionBox.classList.remove('visible');
+            }
+            
+            if (!showCarryQuestion && currentColumn < numDigits) {
+                numberBank.classList.add('visible');
+            } else {
+                numberBank.classList.remove('visible');
+            }
+            
+            if (currentColumn >= numDigits && !showCarryQuestion) {
+                actionButtons.classList.add('visible');
+            } else {
+                actionButtons.classList.remove('visible');
+            }
+            
+            if (isChecked) {
+                checkButton.style.display = 'none';
+                nextButton.style.display = 'flex';
+            } else {
+                checkButton.style.display = 'flex';
+                nextButton.style.display = 'none';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
