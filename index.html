@@ -37,6 +37,31 @@
             margin-bottom: 1rem;
         }
 
+        .sound-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sound-toggle:hover {
+            background-color: #6d28d9;
+            transform: scale(1.1);
+        }
+
         .help-button {
             background-color: #3b82f6;
             color: white;
@@ -328,15 +353,6 @@
             background-color: #16a34a;
         }
 
-        .btn-retry {
-            background-color: #6b7280;
-            color: white;
-        }
-
-        .btn-retry:hover {
-            background-color: #4b5563;
-        }
-
         .feedback {
             text-align: center;
             font-size: 1.25rem;
@@ -383,6 +399,8 @@
     </style>
 </head>
 <body>
+    <button id="soundToggle" class="sound-toggle">🔊</button>
+    
     <div class="container">
         <h1>🧮 Resta con Llevadas - Método Ascensor</h1>
         <p class="subtitle">Como un ascensor: si no puedes restar, ¡sube una planta! (suma 10)</p>
@@ -440,13 +458,10 @@
                 <button id="checkButton" class="btn btn-check" onclick="checkAnswer()">
                     <span>✓</span> Comprobar
                 </button>
-                <button id="nextButton" class="btn btn-next" onclick="generateNewOperation()" style="display: none;">
+                <button id="nextButton" class="btn btn-next" onclick="generateNewOperation()">
                     <span>→</span> Siguiente
                 </button>
-                <button class="btn btn-retry" onclick="reset()">
-                    <span>↻</span> Reintentar
-                </button>
-            </div>
+                </div>
 
             <div id="feedback" class="feedback"></div>
         </div>
@@ -457,21 +472,139 @@
     </div>
 
     <script>
-        var minuend = '23456';
-        var subtrahend = '16387';
+        // REQUISITO: Restas siempre de 5 cifras
+        const DIGITS = 5;
+        var minuend = '';
+        var subtrahend = '';
         var userAnswer = {};
         var carries = {};
         var currentColumn = 0;
         var showCarryQuestion = false;
         var gameStarted = false;
         var isChecked = false;
+        var soundEnabled = true;
+        var audioInitialized = false;
+
+        // Crear elementos de audio
+        var audioCorrecto = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/7b86808e254100aeaba6285b3e0b82650ae78055/Correcto.mp3');
+        var audioError = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/7b86808e254100aeaba6285b3e0b82650ae78055/Error.mp3');
+        var audioTap = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/37b3eb2da9c15c04dfb71dfe1be60f088ea3cdfc/Tap.mp3');
+
+        // Funciones de sonido
+        function reproducirSonidoCorrecto() {
+            if (soundEnabled && audioInitialized) {
+                audioCorrecto.currentTime = 0;
+                audioCorrecto.play().catch(e => console.error("Error al reproducir sonido correcto:", e));
+            }
+        }
+
+        function reproducirSonidoError() {
+            if (soundEnabled && audioInitialized) {
+                audioError.currentTime = 0;
+                audioError.play().catch(e => console.error("Error al reproducir sonido de error:", e));
+            }
+        }
+
+        function reproducirSonidoTap() {
+            if (soundEnabled && audioInitialized) {
+                audioTap.currentTime = 0;
+                audioTap.play().catch(e => console.error("Error al reproducir sonido tap:", e));
+            }
+        }
+
+        // Función para inicializar audio en el primer clic del usuario
+        function initAudio() {
+            if (!audioInitialized) {
+                // Crear un contexto de audio para desbloquear la reproducción
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                audioContext.resume();
+                
+                // Cargar los audios
+                audioCorrecto.load();
+                audioError.load();
+                audioTap.load();
+                
+                audioInitialized = true;
+            }
+        }
+
+        // Función para alternar el sonido
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
+            reproducirSonidoTap();
+        }
+
+        // Añadir evento de clic al botón de sonido
+        document.getElementById('soundToggle').addEventListener('click', toggleSound);
+
+        function generateRandomNumber(digits) {
+            var min = Math.pow(10, digits - 1);
+            var max = Math.pow(10, digits) - 1;
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateOperationWithCarries() {
+            var num1, num2;
+            var hasCarry = false;
+            var attempts = 0;
+
+            // Bucle para asegurar 5 cifras Y al menos una "llevada"
+            while (!hasCarry && attempts < 100) {
+                num1 = generateRandomNumber(DIGITS); // 5 cifras
+                num2 = generateRandomNumber(DIGITS); // 5 cifras
+
+                // Asegurar minuendo > sustraendo
+                if (num1 < num2) {
+                    var temp = num1;
+                    num1 = num2;
+                    num2 = temp;
+                }
+
+                var mStr = num1.toString();
+                var sStr = num2.toString().padStart(DIGITS, '0');
+
+                hasCarry = false;
+                var currentCarry = 0;
+
+                // Verificar llevadas de derecha a izquierda
+                for (var i = DIGITS - 1; i >= 0; i--) {
+                    var mDigit = parseInt(mStr[i]);
+                    var sDigit = parseInt(sStr[i]) + currentCarry;
+                    
+                    if (mDigit < sDigit) {
+                        hasCarry = true;
+                        currentCarry = 1; 
+                    } else {
+                        currentCarry = 0;
+                    }
+                }
+                attempts++;
+            }
+
+            minuend = num1.toString();
+            subtrahend = num2.toString();
+
+            // Opción de reserva
+            if (!hasCarry) {
+                minuend = '65432';
+                subtrahend = '18765';
+            }
+        }
+
+        function generateNewOperation() {
+            generateOperationWithCarries();
+            reset();
+        }
 
         function init() {
-            renderOperation();
+            generateNewOperation(); 
             renderNumberBank();
         }
 
         function toggleHelp() {
+            initAudio(); // Inicializar audio en el primer clic
+            reproducirSonidoTap();
             var helpBox = document.getElementById('helpBox');
             var buttonText = document.getElementById('helpButtonText');
             helpBox.classList.toggle('visible');
@@ -479,27 +612,30 @@
         }
 
         function renderOperation() {
-            var numDigits = Math.max(minuend.length, subtrahend.length);
+            var numDigits = DIGITS; // Fijo a 5
             
             var minuendRow = document.getElementById('minuendRow');
             minuendRow.innerHTML = '';
-            for (var i = 0; i < minuend.length; i++) {
+            var paddedMinuend = minuend.padStart(numDigits, '0');
+            for (var i = 0; i < numDigits; i++) {
                 var div = document.createElement('div');
                 div.className = 'digit-box';
-                div.textContent = minuend[i];
+                div.textContent = paddedMinuend[i];
                 minuendRow.appendChild(div);
             }
 
             var subtrahendRow = document.getElementById('subtrahendRow');
             subtrahendRow.innerHTML = '<div class="digit-box">−</div>';
-            for (var i = 0; i < subtrahend.length; i++) {
-                var reverseIdx = numDigits - 1 - i;
+            var paddedSubtrahend = subtrahend.padStart(numDigits, '0');
+            for (var i = 0; i < numDigits; i++) {
                 var div = document.createElement('div');
                 div.className = 'digit-box';
                 div.id = 'sub-' + i;
-                div.textContent = subtrahend[i];
+                div.textContent = paddedSubtrahend[i];
                 
-                if (carries[reverseIdx]) {
+                var reverseIdx = numDigits - 1 - i; 
+                
+                if (carries[reverseIdx]) { 
                     var carry = document.createElement('span');
                     carry.className = 'carry-mark';
                     carry.textContent = '1';
@@ -510,7 +646,7 @@
             }
 
             var lineRow = document.getElementById('lineRow');
-            lineRow.innerHTML = '<div class="line"></div>';
+            lineRow.innerHTML = '<div class="digit-box"></div>';
             for (var i = 0; i < numDigits; i++) {
                 var div = document.createElement('div');
                 div.className = 'line';
@@ -520,23 +656,25 @@
             var answerRow = document.getElementById('answerRow');
             answerRow.innerHTML = '<div class="digit-box"></div>';
             for (var i = 0; i < numDigits; i++) {
-                var reverseIdx = numDigits - 1 - i;
+                var reverseIdx = numDigits - 1 - i; // Índice de columna: 0 (unidades), 1 (decenas)...
                 var div = document.createElement('div');
                 div.className = 'answer-box';
-                div.id = 'ans-' + i;
+                div.id = 'ans-' + i; // i es el índice de renderizado (0=izquierda)
                 
-                if (currentColumn === reverseIdx && gameStarted) {
+                if (currentColumn === reverseIdx && gameStarted && !isChecked) {
                     div.classList.add('current');
                 }
                 
                 if (userAnswer[reverseIdx] !== undefined) {
                     div.textContent = userAnswer[reverseIdx];
                     div.classList.add('filled');
-                    div.onclick = (function(idx) {
-                        return function() {
-                            deleteAnswer(idx);
-                        };
-                    })(reverseIdx);
+                    if (!isChecked) { 
+                        div.onclick = (function(idx) {
+                            return function() {
+                                deleteAnswer(idx);
+                            };
+                        })(reverseIdx);
+                    }
                 }
                 
                 answerRow.appendChild(div);
@@ -562,12 +700,18 @@
         }
 
         function handleNumberClick(num) {
+            initAudio(); // Inicializar audio en el primer clic
+            reproducirSonidoTap();
+            
+            if (isChecked) return;
             if (!gameStarted) {
                 gameStarted = true;
             }
             
-            var numDigits = Math.max(minuend.length, subtrahend.length);
-            if (currentColumn >= numDigits) return;
+            var numDigits = DIGITS;
+            if (currentColumn >= numDigits) return; 
+
+            document.getElementById('feedback').classList.remove('visible');
             
             userAnswer[currentColumn] = num;
             
@@ -581,67 +725,79 @@
         }
 
         function handleCarry(hasCarry) {
+            initAudio(); // Inicializar audio en el primer clic
+            reproducirSonidoTap();
+            
+            if (isChecked) return;
+            
             if (hasCarry) {
                 var nextColumn = currentColumn + 1;
                 carries[nextColumn] = true;
+            } else {
+                delete carries[currentColumn + 1];
             }
+            
             showCarryQuestion = false;
             currentColumn++;
+            
             renderOperation();
         }
 
         function deleteAnswer(idx) {
+            initAudio(); // Inicializar audio en el primer clic
+            reproducirSonidoTap();
+            
+            if (isChecked) return;
+            
             delete userAnswer[idx];
             delete carries[idx + 1];
             currentColumn = idx;
             showCarryQuestion = false;
-            isChecked = false;
+            isChecked = false; // Permitir al usuario corregir después de un chequeo fallido
             document.getElementById('feedback').classList.remove('visible');
             renderOperation();
         }
 
         function checkAnswer() {
-            var numDigits = Math.max(minuend.length, subtrahend.length);
-            var correctAnswer = (parseInt(minuend) - parseInt(subtrahend)).toString();
-            while (correctAnswer.length < numDigits) {
-                correctAnswer = '0' + correctAnswer;
+            initAudio(); // Inicializar audio en el primer clic
+            reproducirSonidoTap();
+            
+            var numDigits = DIGITS;
+            var correctAnswerNum = parseInt(minuend) - parseInt(subtrahend);
+            var correctAnswer = correctAnswerNum.toString().padStart(numDigits, '0');
+            
+            // CORRECCIÓN: Reconstruir la respuesta del usuario correctamente
+            var userResult = '';
+            for (let i = 0; i < numDigits; i++) {
+                var columnIdx = numDigits - 1 - i; // Convertir de posición de visualización a índice de columna
+                if (userAnswer[columnIdx] === undefined) {
+                    document.getElementById('feedback').textContent = 'Asegúrate de completar todos los dígitos antes de comprobar.';
+                    document.getElementById('feedback').className = 'feedback error visible';
+                    isChecked = false;
+                    updateUI();
+                    return;
+                }
+                userResult += userAnswer[columnIdx];
             }
             
-            var userAnswerString = '';
-            for (var i = numDigits - 1; i >= 0; i--) {
-                userAnswerString += userAnswer[i] || '';
-            }
+            userResult = userResult.padStart(numDigits, '0'); 
             
             var feedback = document.getElementById('feedback');
-            if (userAnswerString === correctAnswer) {
+
+            if (userResult === correctAnswer) {
                 feedback.textContent = '¡Excelente! La respuesta es correcta. 🎉';
                 feedback.className = 'feedback success visible';
+                reproducirSonidoCorrecto();
             } else {
-                feedback.textContent = 'Ups, revisa tu respuesta. Inténtalo de nuevo.';
+                var displayCorrectAnswer = correctAnswerNum.toString();
+                feedback.innerHTML = `Ups, revisa tu respuesta. La respuesta correcta es: <strong>${displayCorrectAnswer}</strong>.`;
                 feedback.className = 'feedback error visible';
+                reproducirSonidoError();
             }
             
             isChecked = true;
+            renderOperation(); 
             updateUI();
-        }
-
-        function generateNewOperation() {
-            var digits = Math.floor(Math.random() * 2) + 4;
-            var max = Math.pow(10, digits) - 1;
-            var min = Math.pow(10, digits - 1);
-            
-            var newMinuend = Math.floor(Math.random() * (max - min + 1)) + min;
-            var newSubtrahend = Math.floor(Math.random() * (max - min + 1)) + min;
-            
-            if (newMinuend < newSubtrahend) {
-                var temp = newMinuend;
-                newMinuend = newSubtrahend;
-                newSubtrahend = temp;
-            }
-            
-            minuend = newMinuend.toString();
-            subtrahend = newSubtrahend.toString();
-            reset();
         }
 
         function reset() {
@@ -656,30 +812,41 @@
         }
 
         function changeOperation() {
-            var newMinuend = prompt('Introduce el minuendo:', minuend);
-            var newSubtrahend = prompt('Introduce el sustraendo:', subtrahend);
-            if (newMinuend && newSubtrahend) {
+            initAudio(); // Inicializar audio en el primer clic
+            reproducirSonidoTap();
+            
+            if (isChecked) return;
+            
+            var newMinuend = prompt('Introduce el minuendo (5 cifras):', minuend);
+            var newSubtrahend = prompt('Introduce el sustraendo (5 cifras):', subtrahend);
+            
+            if (newMinuend && newSubtrahend && 
+                newMinuend.length === DIGITS && newSubtrahend.length === DIGITS &&
+                parseInt(newMinuend) > parseInt(newSubtrahend)) {
+                
                 minuend = newMinuend;
                 subtrahend = newSubtrahend;
                 reset();
+            } else if (newMinuend && newSubtrahend) {
+                 alert('Error: Ambos números deben ser de 5 cifras y el minuendo debe ser mayor que el sustraendo.');
             }
         }
 
         function updateUI() {
-            var numDigits = Math.max(minuend.length, subtrahend.length);
+            var numDigits = DIGITS;
             var questionBox = document.getElementById('questionBox');
             var numberBank = document.getElementById('numberBank');
             var actionButtons = document.getElementById('actionButtons');
             var checkButton = document.getElementById('checkButton');
             var nextButton = document.getElementById('nextButton');
             
-            if (showCarryQuestion) {
+            if (showCarryQuestion && !isChecked) {
                 questionBox.classList.add('visible');
             } else {
                 questionBox.classList.remove('visible');
             }
             
-            if (!showCarryQuestion && currentColumn < numDigits) {
+            if (!showCarryQuestion && currentColumn < numDigits && !isChecked) {
                 numberBank.classList.add('visible');
             } else {
                 numberBank.classList.remove('visible');
@@ -691,9 +858,10 @@
                 actionButtons.classList.remove('visible');
             }
             
+            // Lógica de botones: solo se muestra "Siguiente" después de comprobar
             if (isChecked) {
                 checkButton.style.display = 'none';
-                nextButton.style.display = 'flex';
+                nextButton.style.display = 'flex'; 
             } else {
                 checkButton.style.display = 'flex';
                 nextButton.style.display = 'none';
