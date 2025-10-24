@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resta con Llevadas - Método Ascensor</title>
+    <title>Resta con Llevadas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <style>
+        /* Variables CSS para personalización */
+        :root {
+            --primary: #3b82f6;
+            --secondary: #ff9f43;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-start: #1a3a5f;
+            --bg-end: #0d2340;
+            --card-bg: #FFFFFF;
+            --text-dark: #1e3a8a;
+            --text-medium: #334155;
+            --text-light: #6b7280;
+            --hint-bg: #e0effc;
+            --confetti-colors: #d946ef, #ff9f43, #3b82f6, #10b981, #facc15;
+            --shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+            --transition: 180ms ease;
+            --final-score-color: #0055e0;
+            --container-max-width: 1200px;
+        }
+
+        /* Estilos base */
         * {
             margin: 0;
             padding: 0;
@@ -12,118 +34,870 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
+            color: var(--text-dark);
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
         }
 
+        /* Contenedor principal */
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: var(--container-max-width);
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Tipografía */
+        h1, h2, h3 {
+            margin-bottom: 16px;
+            color: var(--text-dark);
+            font-weight: 700;
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
+            font-size: 2.5em;
             text-align: center;
-            color: #7c3aed;
-            margin-bottom: 0.5rem;
         }
 
-        .subtitle {
-            text-align: center;
-            color: #4b5563;
-            margin-bottom: 1rem;
+        h2 {
+            font-size: 1.8em;
         }
 
-        .sound-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #7c3aed;
+        h3 {
+            font-size: 1.4em;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text-light);
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--secondary);
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
+            transition: all var(--transition);
+            text-align: center;
+            text-decoration: none;
+            min-height: 44px;
+            min-width: 44px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+        }
+
+        .btn-success:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-icon {
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            z-index: 1000;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 50%;
+            background-color: transparent;
+            color: var(--text-dark);
+            position: relative;
+            z-index: 10;
         }
 
-        .sound-toggle:hover {
-            background-color: #6d28d9;
-            transform: scale(1.1);
+        .btn-icon:hover {
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
-        .help-button {
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            cursor: pointer;
+        .btn-group {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0 auto 2rem;
-            transition: background-color 0.3s;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            z-index: 10;
         }
 
-        .help-button:hover {
-            background-color: #2563eb;
+        .btn-group-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+            position: relative;
+            z-index: 10;
         }
 
-        .help-box {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: 2px solid #93c5fd;
+        /* Pantallas */
+        .screen {
             display: none;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            z-index: 5;
         }
 
-        .help-box.visible {
+        .screen.active {
             display: block;
         }
 
-        .help-box h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #7c3aed;
-            margin-bottom: 1rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .help-box ol {
-            padding-left: 1.5rem;
-            color: #374151;
+        /* Pantalla de inicio */
+        .start-screen {
+            text-align: center;
         }
 
-        .help-box li {
-            margin-bottom: 0.5rem;
+        .start-screen h1 {
+            margin-bottom: 24px;
         }
 
-        .game-box {
+        .start-screen p {
+            max-width: 600px;
+            margin: 0 auto 24px;
+            font-size: 1.2em;
+            color: var(--text-light);
+        }
+
+        .hint-card {
+            background-color: var(--hint-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 650px;
+            color: var(--text-medium);
+            font-size: 1.1em;
+        }
+
+        .hint-card span {
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .start-image {
+            max-width: 100%;
+            margin: 20px auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        /* Barra de progreso */
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            position: relative;
+            z-index: 5;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--secondary);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: right;
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        /* Controles superiores */
+        .top-controls {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .timer {
+            background-color: var(--card-bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 14px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 20;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Números y bloques */
+        .number-container {
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .number-display {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            padding: 10px 20px;
+            background-color: rgba(59, 130, 246, 0.05);
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        .instruction-text {
+            font-style: italic;
+            color: var(--text-medium);
+            margin: 10px 0 20px;
+            font-size: 1.1em;
+        }
+
+        .digit-blocks {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 30px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 10px 0;
+            max-width: 100%;
+            position: relative;
+            z-index: 5;
+        }
+
+        .digit-block {
+            width: 48px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+            transition: all var(--transition);
+            flex-shrink: 0;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .digit-block.editable {
             background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
+            border: 2px dashed #ccc;
         }
 
+        .digit-block.editable.filled {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--success);
+        }
+
+        .digit-block.editable.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--danger);
+            animation: shake 0.5s ease;
+        }
+
+        .digit-separator {
+            width: 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            flex-shrink: 0;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Banco de dígitos */
+        .digit-bank {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px auto;
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .digit-btn {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--card-bg);
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+            z-index: 10;
+        }
+
+        .digit-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .digit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .digit-btn:disabled:hover {
+            background-color: var(--card-bg);
+            color: var(--text-dark);
+            border-color: #e0e0e0;
+            transform: none;
+        }
+
+        /* Estilo para el botón "Completar con ceros" similar a los dígitos del banco */
+        .fill-zeros-btn {
+            width: auto;
+            height: 54px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--card-bg);
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            color: var(--text-dark);
+            position: relative;
+            z-index: 10;
+        }
+
+        .fill-zeros-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Feedback */
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            position: relative;
+            z-index: 5;
+            font-size: 1.1em;
+        }
+
+        .feedback.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .feedback.error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform var(--transition);
+            position: relative;
+            z-index: 1001;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color var(--transition);
+            position: relative;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            color: var(--text-dark);
+        }
+
+        /* Estilos para el contenido del modal de ayuda */
+        .help-content h3 {
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-size: 1.3em;
+        }
+
+        .help-steps {
+            margin-bottom: 24px;
+        }
+
+        .help-steps ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .help-steps li {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .help-rule {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .rule-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .rule-arrow {
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .rule-text {
+            flex: 1;
+            font-size: 1.1em;
+        }
+
+        .rule-highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .help-examples {
+            margin-top: 30px;
+        }
+
+        .example {
+            background-color: rgba(255, 159, 67, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .example:last-child {
+            margin-bottom: 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .example-step {
+            margin-bottom: 10px;
+            padding-left: 24px;
+            position: relative;
+            font-size: 1.1em;
+        }
+
+        .example-step:before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: var(--secondary);
+        }
+
+        .example-result {
+            font-weight: 600;
+            margin-top: 12px;
+            font-size: 1.2em;
+        }
+
+        .example-explanation {
+            font-style: italic;
+            color: var(--text-light);
+            margin-top: 12px;
+            font-size: 1.1em;
+        }
+
+        /* Pantalla final */
+        .final-screen {
+            text-align: center;
+        }
+
+        .trophy {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: trophyAnimation 2s ease-in-out infinite;
+            display: none;
+        }
+
+        .trophy.show {
+            display: block;
+        }
+
+        @keyframes trophyAnimation {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            75% { transform: scale(1.1) rotate(-5deg); }
+        }
+
+        .final-score {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: var(--final-score-color) !important;
+            margin: 20px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .final-score.perfect {
+            color: var(--final-score-color) !important;
+        }
+
+        .final-time {
+            font-size: 20px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .final-message {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+        }
+
+        .credit {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .school-logo {
+            max-width: 150px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary);
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 999;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Puntuación en modo infinito */
+        .infinite-score {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 16px;
+            z-index: 20;
+        }
+
+        /* Resaltado de magnitud en el título */
+        .magnitude-highlight {
+            color: #ff9f43;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (min-width: 480px) {
+            .container {
+                padding: 30px;
+            }
+            
+            h1 {
+                font-size: 2.8em;
+            }
+            
+            .number-display {
+                font-size: 40px;
+                padding: 12px 24px;
+            }
+            
+            .digit-block {
+                width: 54px;
+                height: 68px;
+                font-size: 26px;
+            }
+            
+            .digit-separator {
+                height: 68px;
+                font-size: 30px;
+            }
+            
+            .digit-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 26px;
+            }
+            
+            .trophy {
+                font-size: 100px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 3.2em;
+            }
+            
+            .number-display {
+                font-size: 44px;
+                padding: 14px 28px;
+            }
+            
+            .digit-block {
+                width: 60px;
+                height: 75px;
+                font-size: 28px;
+            }
+            
+            .digit-separator {
+                height: 75px;
+                font-size: 32px;
+            }
+            
+            .digit-btn {
+                width: 66px;
+                height: 66px;
+                font-size: 28px;
+            }
+            
+            .top-controls {
+                top: 20px;
+                left: 20px;
+            }
+            
+            .timer {
+                top: 20px;
+                right: 20px;
+                padding: 10px 18px;
+                font-size: 16px;
+            }
+            
+            .trophy {
+                font-size: 120px;
+            }
+            
+            /* Para pantallas más grandes, el banco de dígitos en una sola fila */
+            .digit-bank {
+                max-width: 800px;
+                flex-wrap: nowrap;
+            }
+        }
+
+        /* Para pantallas muy pequeñas, organizar el banco de dígitos en dos filas */
+        @media (max-width: 767px) {
+            .digit-bank {
+                max-width: 300px;
+                flex-wrap: wrap;
+            }
+            
+            .digit-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 22px;
+            }
+            
+            .digit-block {
+                width: 42px;
+                height: 54px;
+                font-size: 22px;
+            }
+            
+            .digit-separator {
+                height: 54px;
+                font-size: 26px;
+            }
+            
+            .number-display {
+                font-size: 32px;
+                padding: 8px 16px;
+            }
+            
+            .fill-zeros-btn {
+                height: 48px;
+                font-size: 16px;
+                padding: 0 14px;
+            }
+        }
+
+        /* Accesibilidad */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Animaciones reducidas */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .trophy {
+                animation: none;
+            }
+        }
+
+        /* Estilos específicos para la aplicación de resta */
         .operation-container {
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 5;
         }
 
         .operation {
@@ -247,19 +1021,6 @@
             justify-content: center;
         }
 
-        .btn {
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1.25rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s;
-        }
-
         .btn-yes {
             background-color: #22c55e;
             color: white;
@@ -304,12 +1065,13 @@
             margin: 0 auto;
         }
 
+        /* CORRECCIÓN: Paleta de colores para los botones del banco de números */
         .number-btn {
-            background-color: #a855f7;
-            color: white;
+            background-color: var(--card-bg); /* Fondo blanco */
+            color: var(--text-dark); /* Texto azul oscuro */
+            border: 2px solid #e0e0e0; /* Borde gris */
             width: 4rem;
             height: 4rem;
-            border: none;
             border-radius: 0.5rem;
             font-size: 1.5rem;
             font-weight: bold;
@@ -319,7 +1081,9 @@
         }
 
         .number-btn:hover {
-            background-color: #9333ea;
+            background-color: var(--primary); /* Fondo azul al pasar el ratón */
+            color: white;
+            border-color: var(--primary);
             transform: scale(1.1);
         }
 
@@ -353,29 +1117,6 @@
             background-color: #16a34a;
         }
 
-        .feedback {
-            text-align: center;
-            font-size: 1.25rem;
-            font-weight: bold;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            display: none;
-        }
-
-        .feedback.visible {
-            display: block;
-        }
-
-        .feedback.success {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-
-        .feedback.error {
-            background-color: #fed7aa;
-            color: #9a3412;
-        }
-
         .manual-button {
             background-color: #6366f1;
             color: white;
@@ -396,14 +1137,89 @@
         .text-center {
             text-align: center;
         }
+
+        .sound-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .sound-toggle:hover {
+            background-color: #6d28d9;
+            transform: scale(1.1);
+        }
+
+        .help-button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto 2rem;
+            transition: background-color 0.3s;
+        }
+
+        .help-button:hover {
+            background-color: #2563eb;
+        }
+
+        .help-box {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #93c5fd;
+            display: none;
+        }
+
+        .help-box.visible {
+            display: block;
+        }
+
+        .help-box h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 1rem;
+        }
+
+        .help-box ol {
+            padding-left: 1.5rem;
+            color: #374151;
+        }
+
+        .help-box li {
+            margin-bottom: 0.5rem;
+        }
     </style>
 </head>
 <body>
     <button id="soundToggle" class="sound-toggle">🔊</button>
     
     <div class="container">
-        <h1>🧮 Resta con Llevadas - Método Ascensor</h1>
-        <p class="subtitle">Como un ascensor: si no puedes restar, ¡sube una planta! (suma 10)</p>
+        <h1>🧮 Resta con Llevadas</h1>
+        <center><p class="subtitle">Como un ascensor: si no puedes restar, ¡sube una planta!</p></center>
+        
         
         <div class="text-center">
             <button class="help-button" onclick="toggleHelp()">
@@ -413,16 +1229,17 @@
         </div>
 
         <div id="helpBox" class="help-box">
-            <h2>📚 Cómo jugar:</h2>
+            <h2>📚 Pasos para realizar la resta con llevadas:</h2>
             <ol>
-                <li>Empieza por la columna de las unidades (derecha)</li>
-                <li>Si no puedes restar porque el número de arriba es menor, "sube en el ascensor" (suma 10)</li>
-                <li>Haz clic en el número correcto del banco de números</li>
-                <li>Responde si te llevas 1 para la siguiente columna (aparecerá un 1 pequeño delante)</li>
-                <li>Si te llevas 1, recuerda sumarlo a la cifra del sustraendo en la siguiente columna</li>
-                <li>Continúa hasta completar toda la resta</li>
-                <li>¡Comprueba tu respuesta al final!</li>
+                <li>Empieza por la derecha.</li>
+                <li>Busca cuánto falta para llegar a la cifra de arriba.</li>
+                <li>Si completas hasta una decena mayor (ej. de 7 a 13), te llevas 1.</li>
+                <li>Esa llevada se suma a la siguiente cifra del sustraendo.</li>
             </ol>
+            
+            <p style="margin-top: 1rem; margin-bottom: 1rem;"></p>
+            
+            <p style="font-weight: bold; text-align: center;">¡Comprueba tu respuesta al final!</p>
         </div>
 
         <div class="game-box">
@@ -461,7 +1278,7 @@
                 <button id="nextButton" class="btn btn-next" onclick="generateNewOperation()">
                     <span>→</span> Siguiente
                 </button>
-                </div>
+            </div>
 
             <div id="feedback" class="feedback"></div>
         </div>
@@ -472,8 +1289,7 @@
     </div>
 
     <script>
-        // REQUISITO: Restas siempre de 5 cifras
-        const DIGITS = 5;
+        // Variables globales
         var minuend = '';
         var subtrahend = '';
         var userAnswer = {};
@@ -484,6 +1300,7 @@
         var isChecked = false;
         var soundEnabled = true;
         var audioInitialized = false;
+        var maxDigits = 5; // Por defecto, máximo de dígitos
 
         // Crear elementos de audio
         var audioCorrecto = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/7b86808e254100aeaba6285b3e0b82650ae78055/Correcto.mp3');
@@ -549,10 +1366,10 @@
             var hasCarry = false;
             var attempts = 0;
 
-            // Bucle para asegurar 5 cifras Y al menos una "llevada"
+            // Bucle para asegurar al menos una "llevada"
             while (!hasCarry && attempts < 100) {
-                num1 = generateRandomNumber(DIGITS); // 5 cifras
-                num2 = generateRandomNumber(DIGITS); // 5 cifras
+                num1 = generateRandomNumber(maxDigits);
+                num2 = generateRandomNumber(maxDigits);
 
                 // Asegurar minuendo > sustraendo
                 if (num1 < num2) {
@@ -562,13 +1379,13 @@
                 }
 
                 var mStr = num1.toString();
-                var sStr = num2.toString().padStart(DIGITS, '0');
+                var sStr = num2.toString().padStart(maxDigits, '0');
 
                 hasCarry = false;
                 var currentCarry = 0;
 
                 // Verificar llevadas de derecha a izquierda
-                for (var i = DIGITS - 1; i >= 0; i--) {
+                for (var i = maxDigits - 1; i >= 0; i--) {
                     var mDigit = parseInt(mStr[i]);
                     var sDigit = parseInt(sStr[i]) + currentCarry;
                     
@@ -612,7 +1429,7 @@
         }
 
         function renderOperation() {
-            var numDigits = DIGITS; // Fijo a 5
+            var numDigits = Math.max(minuend.length, subtrahend.length);
             
             var minuendRow = document.getElementById('minuendRow');
             minuendRow.innerHTML = '';
@@ -708,7 +1525,7 @@
                 gameStarted = true;
             }
             
-            var numDigits = DIGITS;
+            var numDigits = Math.max(minuend.length, subtrahend.length);
             if (currentColumn >= numDigits) return; 
 
             document.getElementById('feedback').classList.remove('visible');
@@ -762,7 +1579,7 @@
             initAudio(); // Inicializar audio en el primer clic
             reproducirSonidoTap();
             
-            var numDigits = DIGITS;
+            var numDigits = Math.max(minuend.length, subtrahend.length);
             var correctAnswerNum = parseInt(minuend) - parseInt(subtrahend);
             var correctAnswer = correctAnswerNum.toString().padStart(numDigits, '0');
             
@@ -815,25 +1632,43 @@
             initAudio(); // Inicializar audio en el primer clic
             reproducirSonidoTap();
             
-            if (isChecked) return;
-            
-            var newMinuend = prompt('Introduce el minuendo (5 cifras):', minuend);
-            var newSubtrahend = prompt('Introduce el sustraendo (5 cifras):', subtrahend);
-            
-            if (newMinuend && newSubtrahend && 
-                newMinuend.length === DIGITS && newSubtrahend.length === DIGITS &&
-                parseInt(newMinuend) > parseInt(newSubtrahend)) {
-                
-                minuend = newMinuend;
-                subtrahend = newSubtrahend;
-                reset();
-            } else if (newMinuend && newSubtrahend) {
-                 alert('Error: Ambos números deben ser de 5 cifras y el minuendo debe ser mayor que el sustraendo.');
+            if (isChecked) {
+                alert("Por favor, termina o reinicia la operación actual antes de cambiarla.");
+                return;
             }
+            
+            var newMinuend = prompt('Introduce el minuendo (número mayor):', minuend);
+            if (newMinuend === null) return; // Usuario canceló
+            
+            var newSubtrahend = prompt('Introduce el sustraendo (número menor):', subtrahend);
+            if (newSubtrahend === null) return; // Usuario canceló
+            
+            // Validar que sean números y que el minuendo sea mayor
+            var numMinuend = parseInt(newMinuend);
+            var numSubtrahend = parseInt(newSubtrahend);
+
+            if (isNaN(numMinuend) || isNaN(numSubtrahend)) {
+                alert('Error: Ambos valores deben ser números válidos.');
+                return;
+            }
+
+            if (numMinuend <= numSubtrahend) {
+                alert('Error: El minuendo debe ser mayor que el sustraendo.');
+                return;
+            }
+            
+            // Si todo es válido, actualizar la operación
+            minuend = newMinuend;
+            subtrahend = newSubtrahend;
+            
+            // Actualizar el máximo de dígitos según la operación más larga
+            maxDigits = Math.max(minuend.length, subtrahend.length);
+            
+            reset();
         }
 
         function updateUI() {
-            var numDigits = DIGITS;
+            var numDigits = Math.max(minuend.length, subtrahend.length);
             var questionBox = document.getElementById('questionBox');
             var numberBank = document.getElementById('numberBank');
             var actionButtons = document.getElementById('actionButtons');
