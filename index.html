@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resta con Llevadas</title>
+    <title>La resta con llevadas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
     <style>
         /* Variables CSS para personalización */
@@ -12,6 +12,8 @@
             --secondary: #ff9f43;
             --success: #10b981;
             --danger: #ef4444;
+            --light-success: #86efac;
+            --light-danger: #fca5a5;
             --bg-start: #1a3a5f;
             --bg-end: #0d2340;
             --card-bg: #FFFFFF;
@@ -23,7 +25,6 @@
             --shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
             --transition: 180ms ease;
             --final-score-color: #0055e0;
-            --container-max-width: 1200px;
         }
 
         /* Estilos base */
@@ -42,17 +43,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
+            padding: 10px;
+            overflow-x: hidden;
         }
 
-        /* Contenedor principal */
+        /* Contenedor principal - optimizado para móviles */
         .container {
             width: 100%;
-            max-width: var(--container-max-width);
+            max-width: 100%;
             background-color: var(--card-bg);
             border-radius: 20px;
             box-shadow: var(--shadow);
-            padding: 30px;
+            padding: 20px;
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
@@ -66,16 +68,16 @@
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 2.2em;
             text-align: center;
         }
 
         h2 {
-            font-size: 1.8em;
+            font-size: 1.6em;
         }
 
         h3 {
-            font-size: 1.4em;
+            font-size: 1.3em;
         }
 
         p {
@@ -86,12 +88,12 @@
         /* Botones */
         .btn {
             display: inline-block;
-            padding: 15px 40px;
+            padding: 12px 30px;
             background-color: var(--secondary);
             color: white;
             border: none;
             border-radius: 50px;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: 700;
             cursor: pointer;
             transition: all var(--transition);
@@ -134,6 +136,26 @@
 
         .btn-danger:hover {
             filter: brightness(1.1);
+        }
+
+        .btn-light-success {
+            background-color: var(--light-success);
+            color: var(--text-dark);
+        }
+
+        .btn-light-success:hover {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-light-danger {
+            background-color: var(--light-danger);
+            color: var(--text-dark);
+        }
+
+        .btn-light-danger:hover {
+            background-color: var(--danger);
+            color: white;
         }
 
         .btn-icon {
@@ -180,10 +202,13 @@
             animation: fadeIn 0.5s ease;
             position: relative;
             z-index: 5;
+            width: 100%;
         }
 
         .screen.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         @keyframes fadeIn {
@@ -197,24 +222,24 @@
         }
 
         .start-screen h1 {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .start-screen p {
-            max-width: 600px;
-            margin: 0 auto 24px;
-            font-size: 1.2em;
+            max-width: 90%;
+            margin: 0 auto 20px;
+            font-size: 1.1em;
             color: var(--text-light);
         }
 
         .hint-card {
             background-color: var(--hint-bg);
             border-radius: 12px;
-            padding: 20px;
+            padding: 18px;
             margin: 20px auto;
-            max-width: 650px;
+            max-width: 90%;
             color: var(--text-medium);
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .hint-card span {
@@ -223,10 +248,83 @@
         }
 
         .start-image {
-            max-width: 100%;
-            margin: 20px auto;
+            max-width: 90%;
+            margin: 20px auto 0;
             display: block;
             border-radius: 12px;
+        }
+
+        /* Cabecera del juego */
+        .game-header {
+            position: relative;
+            min-height: 60px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Botones fijos en las esquinas */
+        .fixed-sound-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .fixed-sound-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .fixed-help-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all var(--transition);
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .fixed-help-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .game-header .timer,
+        .game-header .infinite-score {
+            background-color: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-dark);
+            z-index: 5;
         }
 
         /* Barra de progreso */
@@ -234,7 +332,7 @@
             height: 8px;
             background-color: #e0e0e0;
             border-radius: 4px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             overflow: hidden;
             position: relative;
             z-index: 5;
@@ -254,118 +352,98 @@
             margin-bottom: 8px;
         }
 
-        /* Controles superiores */
-        .top-controls {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 20;
-        }
-
-        .timer {
-            background-color: var(--card-bg);
-            padding: 6px 12px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            font-weight: 600;
-            font-size: 14px;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 20;
-        }
-
-        .top-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        /* Números y bloques */
-        .number-container {
-            margin: 20px 0;
-            text-align: center;
-            position: relative;
-            z-index: 5;
-        }
-
-        .number-display {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 24px;
-            letter-spacing: 1px;
-            padding: 10px 20px;
-            background-color: rgba(59, 130, 246, 0.05);
-            border-radius: 10px;
-            display: inline-block;
-        }
-
-        .instruction-text {
-            font-style: italic;
-            color: var(--text-medium);
-            margin: 10px 0 20px;
-            font-size: 1.1em;
-        }
-
-        .digit-blocks {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 30px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding: 10px 0;
-            max-width: 100%;
-            position: relative;
-            z-index: 5;
-        }
-
-        .digit-block {
-            width: 48px;
-            height: 60px;
+        /* Operación matemática - optimizada para móviles */
+        .operation-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            font-size: 24px;
-            font-weight: 600;
+            margin: 25px 0;
             position: relative;
-            transition: all var(--transition);
-            flex-shrink: 0;
+            z-index: 5;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .operation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-family: 'Courier New', monospace;
+            font-size: 1.6rem;
+        }
+
+        .row {
+            display: flex;
+            gap: 0.3rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .digit-box {
+            width: 2.8rem;
+            height: 2.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .carry-mark {
+            position: absolute;
+            bottom: 0.15rem;
+            left: 0.15rem;
+            color: #ef4444;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .line {
+            width: 2.8rem;
+            border-top: 2px solid #1f2937;
+        }
+
+        .answer-box {
+            width: 2.8rem;
+            height: 2.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            background-color: #f9fafb;
+            transition: all 0.3s;
             cursor: pointer;
-            z-index: 5;
         }
 
-        .digit-block.editable {
-            background-color: white;
-            border: 2px dashed #ccc;
+        .answer-box.current {
+            border-color: #a855f7;
+            background-color: #faf5ff;
+            transform: scale(1.1);
         }
 
-        .digit-block.editable.filled {
-            background-color: rgba(16, 185, 129, 0.1);
-            border: 2px solid var(--success);
+        .answer-box.filled {
+            border-color: #4ade80;
+            background-color: #f0fdf4;
         }
 
-        .digit-block.editable.error {
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 2px solid var(--danger);
+        .answer-box.filled:hover {
+            background-color: #dcfce7;
+        }
+
+        .answer-box.correct {
+            border-color: var(--success);
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            font-weight: 900;
+        }
+
+        .answer-box.incorrect {
+            border-color: var(--danger);
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            font-weight: 900;
             animation: shake 0.5s ease;
-        }
-
-        .digit-separator {
-            width: 24px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-dark);
-            flex-shrink: 0;
         }
 
         @keyframes shake {
@@ -374,29 +452,53 @@
             75% { transform: translateX(5px); }
         }
 
-        /* Banco de dígitos */
+        .arrow-container {
+            display: flex;
+            align-items: center;
+            margin-left: 0.8rem;
+        }
+
+        .arrow {
+            width: 2.4rem;
+            height: 2.4rem;
+            color: #7c3aed;
+            animation: bounce 1s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Banco de dígitos - optimizado para móviles con distribución simétrica */
         .digit-bank {
             display: flex;
             justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             margin: 20px auto;
             position: relative;
             z-index: 5;
             width: 100%;
-            max-width: 800px;
+            max-width: 320px;
+        }
+
+        .digit-bank.hidden {
+            display: none;
         }
 
         .digit-btn {
-            width: 54px;
-            height: 54px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             background-color: var(--card-bg);
             border: 2px solid #e0e0e0;
             border-radius: 12px;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition);
@@ -423,59 +525,131 @@
             transform: none;
         }
 
-        /* Estilo para el botón "Completar con ceros" similar a los dígitos del banco */
-        .fill-zeros-btn {
+        /* Cuadro emergente para pregunta de llevada */
+        .carry-popup {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            text-align: center;
+            max-width: 90%;
             width: auto;
-            height: 54px;
-            padding: 0 20px;
+        }
+
+        .carry-popup.visible {
+            display: block;
+        }
+
+        .carry-popup h3 {
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            font-size: 1.1em;
+            white-space: nowrap;
+        }
+
+        .carry-popup-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Formularios para modo personalizado simplificado */
+        .custom-step-form {
+            display: none;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .custom-step-form.visible {
+            display: block;
+        }
+
+        .custom-step-form h3 {
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            font-size: 1.3em;
+        }
+
+        .input-group {
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: var(--card-bg);
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            color: var(--text-dark);
-            position: relative;
-            z-index: 10;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
-        .fill-zeros-btn:hover {
-            background-color: var(--primary);
-            color: white;
+        .input-group input {
+            width: 160px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.2em;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
             border-color: var(--primary);
-            transform: translateY(-2px);
+        }
+
+        .input-group .btn {
+            min-width: 100px;
         }
 
         /* Feedback */
         .feedback {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
+            margin: 20px 0;
+            padding: 18px;
+            border-radius: 12px;
             display: none;
-            animation: fadeIn 0.3s ease;
             position: relative;
-            z-index: 5;
-            font-size: 1.1em;
+            z-index: 50;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .feedback.success {
-            background-color: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success);
+            background-color: rgba(16, 185, 129, 0.15);
+            border: 3px solid var(--success);
             color: var(--success);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
         .feedback.error {
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--danger);
+            background-color: rgba(239, 68, 68, 0.15);
+            border: 3px solid var(--danger);
             color: var(--danger);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .feedback.show {
             display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
 
         /* Modal */
@@ -503,9 +677,9 @@
         .modal-content {
             background-color: var(--card-bg);
             border-radius: 16px;
-            padding: 30px;
-            max-width: 700px;
-            width: 90%;
+            padding: 25px;
+            max-width: 90%;
+            width: 320px;
             max-height: 90vh;
             overflow-y: auto;
             transform: translateY(20px);
@@ -544,21 +718,21 @@
         .help-content h3 {
             color: var(--primary);
             margin-bottom: 16px;
-            font-size: 1.3em;
+            font-size: 1.2em;
         }
 
         .help-steps {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .help-steps ol {
-            margin-left: 24px;
+            margin-left: 20px;
             margin-bottom: 16px;
         }
 
         .help-steps li {
             margin-bottom: 10px;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .help-rule {
@@ -588,61 +762,12 @@
 
         .rule-text {
             flex: 1;
-            font-size: 1.1em;
+            font-size: 1em;
         }
 
         .rule-highlight {
             color: var(--primary);
             font-weight: 600;
-        }
-
-        .help-examples {
-            margin-top: 30px;
-        }
-
-        .example {
-            background-color: rgba(255, 159, 67, 0.1);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .example:last-child {
-            margin-bottom: 0;
-        }
-
-        .example-title {
-            font-weight: 600;
-            color: var(--secondary);
-            margin-bottom: 12px;
-            font-size: 1.2em;
-        }
-
-        .example-step {
-            margin-bottom: 10px;
-            padding-left: 24px;
-            position: relative;
-            font-size: 1.1em;
-        }
-
-        .example-step:before {
-            content: "•";
-            position: absolute;
-            left: 10px;
-            color: var(--secondary);
-        }
-
-        .example-result {
-            font-weight: 600;
-            margin-top: 12px;
-            font-size: 1.2em;
-        }
-
-        .example-explanation {
-            font-style: italic;
-            color: var(--text-light);
-            margin-top: 12px;
-            font-size: 1.1em;
         }
 
         /* Pantalla final */
@@ -651,7 +776,7 @@
         }
 
         .trophy {
-            font-size: 80px;
+            font-size: 60px;
             margin: 20px 0;
             animation: trophyAnimation 2s ease-in-out infinite;
             display: none;
@@ -669,7 +794,7 @@
         }
 
         .final-score {
-            font-size: 3.5em;
+            font-size: 2.8em;
             font-weight: 700;
             color: var(--final-score-color) !important;
             margin: 20px 0;
@@ -681,26 +806,26 @@
         }
 
         .final-time {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--text-light);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .final-message {
-            font-size: 1.8em;
+            font-size: 1.5em;
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .credit {
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--text-light);
         }
 
         .school-logo {
-            max-width: 150px;
+            max-width: 120px;
             margin: 20px auto;
             display: block;
         }
@@ -720,30 +845,111 @@
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Puntuación en modo infinito */
-        .infinite-score {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--card-bg);
-            padding: 8px 16px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            font-weight: 600;
-            font-size: 16px;
-            z-index: 20;
-        }
-
         /* Resaltado de magnitud en el título */
         .magnitude-highlight {
             color: #ff9f43;
             font-weight: 700;
         }
 
-        /* Responsive */
-        @media (min-width: 480px) {
+        /* Responsive - Tablets y pantallas medianas */
+        @media (min-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
             .container {
+                max-width: 768px;
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            h2 {
+                font-size: 1.7em;
+            }
+            
+            h3 {
+                font-size: 1.4em;
+            }
+            
+            .operation {
+                font-size: 1.9rem;
+            }
+            
+            .digit-box {
+                width: 3.2rem;
+                height: 3.2rem;
+            }
+            
+            .line {
+                width: 3.2rem;
+            }
+            
+            .answer-box {
+                width: 3.2rem;
+                height: 3.2rem;
+                font-size: 1.6rem;
+            }
+            
+            .carry-mark {
+                font-size: 1.2rem;
+            }
+            
+            .digit-btn {
+                width: 54px;
+                height: 54px;
+                font-size: 24px;
+            }
+            
+            .digit-bank {
+                max-width: 400px;
+                gap: 12px;
+            }
+            
+            .arrow {
+                width: 2.8rem;
+                height: 2.8rem;
+            }
+            
+            .btn {
+                padding: 14px 35px;
+                font-size: 1.2em;
+            }
+            
+            .input-group input {
+                width: 180px;
+                padding: 14px;
+                font-size: 1.3em;
+            }
+            
+            .modal-content {
+                width: 500px;
+                padding: 30px;
+            }
+            
+            .trophy {
+                font-size: 80px;
+            }
+            
+            .final-score {
+                font-size: 3.2em;
+            }
+            
+            .school-logo {
+                max-width: 150px;
+            }
+        }
+
+        /* Responsive - Desktop y pantallas grandes */
+        @media (min-width: 1024px) {
+            body {
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
                 padding: 30px;
             }
             
@@ -751,20 +957,35 @@
                 font-size: 2.8em;
             }
             
-            .number-display {
-                font-size: 40px;
-                padding: 12px 24px;
+            h2 {
+                font-size: 1.8em;
             }
             
-            .digit-block {
-                width: 54px;
-                height: 68px;
-                font-size: 26px;
+            h3 {
+                font-size: 1.5em;
             }
             
-            .digit-separator {
-                height: 68px;
-                font-size: 30px;
+            .operation {
+                font-size: 2.1rem;
+            }
+            
+            .digit-box {
+                width: 3.6rem;
+                height: 3.6rem;
+            }
+            
+            .line {
+                width: 3.6rem;
+            }
+            
+            .answer-box {
+                width: 3.6rem;
+                height: 3.6rem;
+                font-size: 1.8rem;
+            }
+            
+            .carry-mark {
+                font-size: 1.3rem;
             }
             
             .digit-btn {
@@ -773,94 +994,214 @@
                 font-size: 26px;
             }
             
+            .digit-bank {
+                max-width: 1000px;
+                gap: 14px;
+            }
+            
+            .arrow {
+                width: 3.2rem;
+                height: 3.2rem;
+            }
+            
+            .btn {
+                padding: 15px 40px;
+                font-size: 1.2em;
+            }
+            
+            .input-group input {
+                width: 200px;
+                padding: 15px;
+                font-size: 1.4em;
+            }
+            
+            .modal-content {
+                width: 600px;
+                padding: 35px;
+            }
+            
             .trophy {
                 font-size: 100px;
             }
-        }
-        
-        @media (min-width: 768px) {
-            h1 {
-                font-size: 3.2em;
+            
+            .final-score {
+                font-size: 3.5em;
             }
             
-            .number-display {
-                font-size: 44px;
-                padding: 14px 28px;
-            }
-            
-            .digit-block {
-                width: 60px;
-                height: 75px;
-                font-size: 28px;
-            }
-            
-            .digit-separator {
-                height: 75px;
-                font-size: 32px;
-            }
-            
-            .digit-btn {
-                width: 66px;
-                height: 66px;
-                font-size: 28px;
-            }
-            
-            .top-controls {
-                top: 20px;
-                left: 20px;
-            }
-            
-            .timer {
-                top: 20px;
-                right: 20px;
-                padding: 10px 18px;
-                font-size: 16px;
-            }
-            
-            .trophy {
-                font-size: 120px;
-            }
-            
-            /* Para pantallas más grandes, el banco de dígitos en una sola fila */
-            .digit-bank {
-                max-width: 800px;
-                flex-wrap: nowrap;
+            .school-logo {
+                max-width: 180px;
             }
         }
 
-        /* Para pantallas muy pequeñas, organizar el banco de dígitos en dos filas */
-        @media (max-width: 767px) {
-            .digit-bank {
-                max-width: 300px;
-                flex-wrap: wrap;
+        /* Pantallas muy pequeñas */
+        @media (max-width: 360px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+            
+            .operation {
+                font-size: 1.4rem;
+            }
+            
+            .digit-box {
+                width: 2.4rem;
+                height: 2.4rem;
+            }
+            
+            .line {
+                width: 2.4rem;
+            }
+            
+            .answer-box {
+                width: 2.4rem;
+                height: 2.4rem;
+                font-size: 1.2rem;
+            }
+            
+            .carry-mark {
+                font-size: 0.8rem;
             }
             
             .digit-btn {
-                width: 48px;
-                height: 48px;
-                font-size: 22px;
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
             }
             
-            .digit-block {
-                width: 42px;
-                height: 54px;
-                font-size: 22px;
+            .digit-bank {
+                max-width: 280px;
+                gap: 8px;
             }
             
-            .digit-separator {
-                height: 54px;
-                font-size: 26px;
+            .arrow {
+                width: 2rem;
+                height: 2rem;
             }
             
-            .number-display {
-                font-size: 32px;
-                padding: 8px 16px;
+            .btn {
+                padding: 10px 25px;
+                font-size: 1em;
             }
             
-            .fill-zeros-btn {
-                height: 48px;
-                font-size: 16px;
-                padding: 0 14px;
+            .input-group input {
+                width: 140px;
+                padding: 10px;
+                font-size: 1.1em;
+            }
+        }
+
+        /* Orientación horizontal en móviles */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                max-width: 95vw;
+                padding: 15px;
+                margin: 0 auto;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 12px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+            }
+            
+            .operation {
+                font-size: 1.3rem;
+            }
+            
+            .digit-box {
+                width: 2.2rem;
+                height: 2.2rem;
+            }
+            
+            .line {
+                width: 2.2rem;
+            }
+            
+            .answer-box {
+                width: 2.2rem;
+                height: 2.2rem;
+                font-size: 1.1rem;
+            }
+            
+            .carry-mark {
+                font-size: 0.7rem;
+            }
+            
+            .digit-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .digit-bank {
+                max-width: 800px;
+                gap: 8px;
+            }
+            
+            .arrow {
+                width: 1.8rem;
+                height: 1.8rem;
+            }
+            
+            .btn {
+                padding: 8px 20px;
+                font-size: 0.9em;
+            }
+            
+            .custom-step-form {
+                margin: 20px 0;
+            }
+            
+            .input-group input {
+                width: 120px;
+                padding: 8px;
+                font-size: 1em;
+            }
+            
+            .custom-step-form h3 {
+                font-size: 1.1em;
+            }
+        }
+
+        /* Pantallas horizontales más grandes (tablets en landscape) */
+        @media (min-width: 768px) and (orientation: landscape) {
+            .container {
+                max-width: 95vw;
+            }
+            
+            .digit-bank {
+                max-width: 900px;
+            }
+        }
+
+        /* Pantallas horizontales muy grandes (desktop en landscape) */
+        @media (min-width: 1024px) and (orientation: landscape) {
+            .container {
+                max-width: 1200px;
+            }
+            
+            .digit-bank {
+                max-width: 1000px;
             }
         }
 
@@ -889,361 +1230,84 @@
                 animation: none;
             }
         }
-
-        /* Estilos específicos para la aplicación de resta */
-        .operation-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 5;
-        }
-
-        .operation {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-family: 'Courier New', monospace;
-            font-size: 2.5rem;
-        }
-
-        .row {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .digit-box {
-            width: 4rem;
-            height: 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .carry-mark {
-            position: absolute;
-            bottom: 0.25rem;
-            left: 0.25rem;
-            color: #ef4444;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .line {
-            width: 4rem;
-            border-top: 4px solid #1f2937;
-        }
-
-        .answer-box {
-            width: 4rem;
-            height: 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 4px solid #d1d5db;
-            border-radius: 0.5rem;
-            font-size: 2rem;
-            font-weight: bold;
-            background-color: #f9fafb;
-            transition: all 0.3s;
-        }
-
-        .answer-box.current {
-            border-color: #a855f7;
-            background-color: #faf5ff;
-            transform: scale(1.1);
-        }
-
-        .answer-box.filled {
-            border-color: #4ade80;
-            background-color: #f0fdf4;
-            cursor: pointer;
-        }
-
-        .answer-box.filled:hover {
-            background-color: #dcfce7;
-        }
-
-        .arrow-container {
-            margin-left: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .arrow {
-            width: 4rem;
-            height: 4rem;
-            color: #7c3aed;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .arrow-text {
-            color: #7c3aed;
-            font-weight: bold;
-            font-size: 0.875rem;
-            text-align: center;
-            margin-top: 0.5rem;
-        }
-
-        .question-box {
-            background-color: #fef9c3;
-            border: 2px solid #facc15;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .question-box.visible {
-            display: block;
-        }
-
-        .question-box p {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #854d0e;
-            margin-bottom: 1rem;
-        }
-
-        .question-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        .btn-yes {
-            background-color: #22c55e;
-            color: white;
-        }
-
-        .btn-yes:hover {
-            background-color: #16a34a;
-        }
-
-        .btn-no {
-            background-color: #ef4444;
-            color: white;
-        }
-
-        .btn-no:hover {
-            background-color: #dc2626;
-        }
-
-        .number-bank {
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .number-bank.visible {
-            display: block;
-        }
-
-        .number-bank p {
-            text-align: center;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #374151;
-            margin-bottom: 1rem;
-        }
-
-        .numbers {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            justify-content: center;
-            max-width: 48rem;
-            margin: 0 auto;
-        }
-
-        /* CORRECCIÓN: Paleta de colores para los botones del banco de números */
-        .number-btn {
-            background-color: var(--card-bg); /* Fondo blanco */
-            color: var(--text-dark); /* Texto azul oscuro */
-            border: 2px solid #e0e0e0; /* Borde gris */
-            width: 4rem;
-            height: 4rem;
-            border-radius: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .number-btn:hover {
-            background-color: var(--primary); /* Fondo azul al pasar el ratón */
-            color: white;
-            border-color: var(--primary);
-            transform: scale(1.1);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .action-buttons.visible {
-            display: flex;
-        }
-
-        .btn-check {
-            background-color: #3b82f6;
-            color: white;
-        }
-
-        .btn-check:hover {
-            background-color: #2563eb;
-        }
-
-        .btn-next {
-            background-color: #22c55e;
-            color: white;
-        }
-
-        .btn-next:hover {
-            background-color: #16a34a;
-        }
-
-        .manual-button {
-            background-color: #6366f1;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: block;
-            margin: 0 auto;
-            transition: background-color 0.3s;
-        }
-
-        .manual-button:hover {
-            background-color: #4f46e5;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .sound-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #7c3aed;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .sound-toggle:hover {
-            background-color: #6d28d9;
-            transform: scale(1.1);
-        }
-
-        .help-button {
-            background-color: #3b82f6;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0 auto 2rem;
-            transition: background-color 0.3s;
-        }
-
-        .help-button:hover {
-            background-color: #2563eb;
-        }
-
-        .help-box {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: 2px solid #93c5fd;
-            display: none;
-        }
-
-        .help-box.visible {
-            display: block;
-        }
-
-        .help-box h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #7c3aed;
-            margin-bottom: 1rem;
-        }
-
-        .help-box ol {
-            padding-left: 1.5rem;
-            color: #374151;
-        }
-
-        .help-box li {
-            margin-bottom: 0.5rem;
-        }
     </style>
 </head>
 <body>
-    <button id="soundToggle" class="sound-toggle">🔊</button>
-    
-    <div class="container">
-        <h1>🧮 Resta con Llevadas</h1>
-        <center><p class="subtitle">Como un ascensor: si no puedes restar, ¡sube una planta!</p></center>
-        
-        
-        <div class="text-center">
-            <button class="help-button" onclick="toggleHelp()">
-                <span>❓</span>
-                <span id="helpButtonText">Mostrar ayuda</span>
-            </button>
-        </div>
-
-        <div id="helpBox" class="help-box">
-            <h2>📚 Pasos para realizar la resta con llevadas:</h2>
-            <ol>
-                <li>Empieza por la derecha.</li>
-                <li>Busca cuánto falta para llegar a la cifra de arriba.</li>
-                <li>Si completas hasta una decena mayor (ej. de 7 a 13), te llevas 1.</li>
-                <li>Esa llevada se suma a la siguiente cifra del sustraendo.</li>
-            </ol>
+    <!-- Pantalla de inicio -->
+    <div id="startScreen" class="screen start-screen active">
+        <div class="container">
+            <h1>La resta con llevadas</h1>
+            <p>Practica la <span class="magnitude-highlight">resta con llevadas</span> y aprende jugando</p>
             
-            <p style="margin-top: 1rem; margin-bottom: 1rem;"></p>
+            <div class="hint-card">
+                Recuerda que en la <span class="magnitude-highlight">resta con llevadas</span>, vamos <span class="magnitude-highlight">de abajo a arriba</span>; no se dice "quitar". Si tienes dudas, pulsa el botón de ayuda. <br><br><strong>¡Buena suerte!</strong>
+            </div>
             
-            <p style="font-weight: bold; text-align: center;">¡Comprueba tu respuesta al final!</p>
+            <div class="btn-group">
+                <button id="startBtn" class="btn" onclick="startGame()">Comenzar</button>
+            </div>
+            
+            <div class="btn-group">
+                <button id="customModeBtn" class="btn btn-primary" onclick="startCustomMode()">Escribe la operación</button>
+            </div>
+            
+            <img src="https://raw.githubusercontent.com/ManuelVS8/Efectos_audio/refs/heads/main/Ni%C3%B1os.png" alt="Niños estudiando" class="start-image">
         </div>
+    </div>
 
-        <div class="game-box">
-            <div class="operation-container">
+    <!-- Pantalla de juego -->
+    <div id="gameScreen" class="screen">
+        <!-- Botones fijos en las esquinas -->
+        <button id="fixedSoundBtn" class="fixed-sound-btn" aria-label="Activar sonido" onclick="toggleSound()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+        </button>
+        
+        <button id="fixedHelpBtn" class="fixed-help-btn" aria-label="Ayuda" onclick="toggleHelpModal()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+        </button>
+        
+        <div class="container">
+            <!-- Cabecera del juego -->
+            <div class="game-header">
+                <div id="timer" class="timer" style="display: none;">00:00</div>
+                <div id="infiniteScore" class="infinite-score" style="display: none;">Puntuación: 0</div>
+            </div>
+
+            <div id="normalProgress" class="progress-text" style="display: none;">1/3</div>
+            <div id="normalProgressBar" class="progress-bar" style="display: none;">
+                <div class="progress-fill" id="progressFill" style="width: 33.33%"></div>
+            </div>
+            
+            <h2 id="questionTitle">Realiza las siguientes restas con llevadas</h2>
+            
+            <!-- Formulario paso 1: Minuendo -->
+            <div id="minuendForm" class="custom-step-form">
+                <h3>Escribe el minuendo</h3>
+                <div class="input-group">
+                    <input type="number" id="customMinuendInput" placeholder="Minuendo" min="10" autofocus>
+                    <button class="btn btn-primary" onclick="acceptMinuend()">Aceptar</button>
+                    <button class="btn btn-danger" onclick="goToStartScreen()">Salir</button>
+                </div>
+            </div>
+            
+            <!-- Formulario paso 2: Sustraendo -->
+            <div id="subtrahendForm" class="custom-step-form">
+                <h3>Escribe el sustraendo</h3>
+                <div class="input-group">
+                    <input type="number" id="customSubtrahendInput" placeholder="Sustraendo" min="1" autofocus>
+                    <button class="btn btn-primary" onclick="acceptSubtrahend()">Aceptar</button>
+                    <button class="btn btn-danger" onclick="goToStartScreen()">Salir</button>
+                </div>
+            </div>
+            
+            <div class="operation-wrapper">
                 <div class="operation">
                     <div id="minuendRow" class="row"></div>
                     <div id="subtrahendRow" class="row"></div>
@@ -1254,42 +1318,86 @@
                     <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                         <path d="M12 19V5M5 12l7-7 7 7"/>
                     </svg>
-                    <p class="arrow-text">Sube el<br/>ascensor</p>
                 </div>
             </div>
 
-            <div id="questionBox" class="question-box">
-                <p>¿Te llevas 1 para la siguiente columna?</p>
-                <div class="question-buttons">
-                    <button class="btn btn-yes" onclick="handleCarry(true)">Sí, me llevo 1</button>
-                    <button class="btn btn-no" onclick="handleCarry(false)">No, continúo</button>
+            <!-- Banco de dígitos siempre visible -->
+            <div class="digit-bank" id="digitBank"></div>
+            
+            <div class="btn-group-row">
+                <button id="deleteBtn" class="btn" onclick="backspace()">Borrar</button>
+                <button id="checkBtn" class="btn btn-primary" onclick="checkAnswer()">Comprobar</button>
+                <button id="continueBtn" class="btn btn-success" style="display: none;" onclick="nextQuestion()">Continuar</button>
+                <button id="newOperationBtn" class="btn btn-primary" style="display: none;" onclick="showCustomOperationForm()">Nueva operación</button>
+                <button id="homeBtn" class="btn" style="display: none;" onclick="goToStartScreen()">Inicio</button>
+                <button id="exitInfiniteBtn" class="btn" style="display: none;" onclick="exitInfiniteMode()">Salir</button>
+            </div>
+            
+            <div id="feedback" class="feedback" aria-live="polite"></div>
+
+            <!-- Cuadro emergente para pregunta de llevada -->
+            <div id="carryPopup" class="carry-popup">
+                <h3>¿Te llevas 1 para la siguiente columna?</h3>
+                <div class="carry-popup-buttons">
+                    <button class="btn btn-light-success" onclick="handleCarry(true)">Sí, me llevo 1</button>
+                    <button class="btn btn-light-danger" onclick="handleCarry(false)">No, continúo</button>
                 </div>
             </div>
-
-            <div id="numberBank" class="number-bank">
-                <p>Banco de números (haz clic para colocar):</p>
-                <div class="numbers" id="numbers"></div>
-            </div>
-
-            <div id="actionButtons" class="action-buttons">
-                <button id="checkButton" class="btn btn-check" onclick="checkAnswer()">
-                    <span>✓</span> Comprobar
-                </button>
-                <button id="nextButton" class="btn btn-next" onclick="generateNewOperation()">
-                    <span>→</span> Siguiente
-                </button>
-            </div>
-
-            <div id="feedback" class="feedback"></div>
         </div>
+    </div>
 
-        <div class="text-center">
-            <button class="manual-button" onclick="changeOperation()">Cambiar operación manualmente</button>
+    <!-- Pantalla final -->
+    <div id="finalScreen" class="screen final-screen">
+        <div class="container">
+            <h1>La resta con llevadas</h1>
+            
+            <div id="trophyContainer" class="trophy">🏆</div>
+            
+            <div class="final-score" id="finalScore">0</div>
+            
+            <div class="final-time" id="finalTime">Tiempo: 00:00</div>
+            
+            <p id="finalMessage"></p>
+            
+            <div class="btn-group">
+                <button id="restartBtn" class="btn" style="background-color: #f59e42;" onclick="restartGame()">Volver al menú</button>
+                <button id="infiniteModeBtn" class="btn btn-primary" onclick="startInfiniteMode()">Entrenamiento infinito</button>
+            </div>
+            
+            <p class="credit">Created by Manuel J. Ventura</p>
+            
+            <img src="https://github.com/ManuelVS8/Efectos_audio/blob/1e2a36cdd1f8bedcb578a30f5ec5cc8f21c287fe/Siurot.png?raw=true" alt="Logo del colegio" class="school-logo">
+        </div>
+    </div>
+
+    <!-- Modal de ayuda -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>¿Cómo realizar la resta con llevadas?</h2>
+                <button class="modal-close" id="closeHelpModal" onclick="toggleHelpModal()">&times;</button>
+            </div>
+            <div class="help-content">
+                <h3>Pasos para realizar la resta con llevadas:</h3>
+                <div class="help-steps">
+                    <ol>
+                        <li>Empieza por la derecha.</li>
+                        <li>Busca cuánto falta para llegar a la cifra de arriba.</li>
+                        <li>Si el minuendo es menor al sustraendo, debes llegar hasta el siguente número que acabe en esa cifra y <span class="magnitude-highlight">te llevas 1</span>.</li>
+                        <li>Esa llevada se suma a la siguiente cifra del sustraendo.</li>
+                    </ol>
+                   <p style="margin-top: 20px; margin-bottom: 20px; text-align: center; font-weight: bold; color: #F54927;">¡Comprueba tu respuesta al final!</p>
+
+                </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Variables globales
+        // Configuración del juego
+        var DIGITS = 5;
         var minuend = '';
         var subtrahend = '';
         var userAnswer = {};
@@ -1298,62 +1406,192 @@
         var showCarryQuestion = false;
         var gameStarted = false;
         var isChecked = false;
-        var soundEnabled = true;
-        var audioInitialized = false;
-        var maxDigits = 5; // Por defecto, máximo de dígitos
+        var gameState = {
+            questions: [],
+            currentQuestionIndex: 0,
+            score: 0,
+            startTime: null,
+            timerInterval: null,
+            soundEnabled: true,
+            audioInitialized: false,
+            gameMode: 'normal',
+            infiniteScore: 0,
+            customMinuend: '',
+            customSubtrahend: ''
+        };
 
-        // Crear elementos de audio
-        var audioCorrecto = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/7b86808e254100aeaba6285b3e0b82650ae78055/Correcto.mp3');
-        var audioError = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/7b86808e254100aeaba6285b3e0b82650ae78055/Error.mp3');
-        var audioTap = new Audio('https://github.com/ManuelVS8/Efectos_audio/raw/37b3eb2da9c15c04dfb71dfe1be60f088ea3cdfc/Tap.mp3');
+        // Elementos del DOM
+        const elements = {
+            startScreen: document.getElementById('startScreen'),
+            gameScreen: document.getElementById('gameScreen'),
+            finalScreen: document.getElementById('finalScreen'),
+            startBtn: document.getElementById('startBtn'),
+            customModeBtn: document.getElementById('customModeBtn'),
+            helpModal: document.getElementById('helpModal'),
+            closeHelpModal: document.getElementById('closeHelpModal'),
+            questionTitle: document.getElementById('questionTitle'),
+            minuendRow: document.getElementById('minuendRow'),
+            subtrahendRow: document.getElementById('subtrahendRow'),
+            lineRow: document.getElementById('lineRow'),
+            answerRow: document.getElementById('answerRow'),
+            digitBank: document.getElementById('digitBank'),
+            deleteBtn: document.getElementById('deleteBtn'),
+            checkBtn: document.getElementById('checkBtn'),
+            continueBtn: document.getElementById('continueBtn'),
+            newOperationBtn: document.getElementById('newOperationBtn'),
+            homeBtn: document.getElementById('homeBtn'),
+            exitInfiniteBtn: document.getElementById('exitInfiniteBtn'),
+            fixedSoundBtn: document.getElementById('fixedSoundBtn'),
+            fixedHelpBtn: document.getElementById('fixedHelpBtn'),
+            feedback: document.getElementById('feedback'),
+            progressText: document.getElementById('normalProgress'),
+            progressFill: document.getElementById('progressFill'),
+            normalProgressBar: document.getElementById('normalProgressBar'),
+            normalProgress: document.getElementById('normalProgress'),
+            infiniteScore: document.getElementById('infiniteScore'),
+            timer: document.getElementById('timer'),
+            finalScore: document.getElementById('finalScore'),
+            finalTime: document.getElementById('finalTime'),
+            finalMessage: document.getElementById('finalMessage'),
+            restartBtn: document.getElementById('restartBtn'),
+            infiniteModeBtn: document.getElementById('infiniteModeBtn'),
+            trophyContainer: document.getElementById('trophyContainer'),
+            carryPopup: document.getElementById('carryPopup'),
+            minuendForm: document.getElementById('minuendForm'),
+            subtrahendForm: document.getElementById('subtrahendForm'),
+            customMinuendInput: document.getElementById('customMinuendInput'),
+            customSubtrahendInput: document.getElementById('customSubtrahendInput')
+        };
 
-        // Funciones de sonido
-        function reproducirSonidoCorrecto() {
-            if (soundEnabled && audioInitialized) {
-                audioCorrecto.currentTime = 0;
-                audioCorrecto.play().catch(e => console.error("Error al reproducir sonido correcto:", e));
-            }
-        }
+        // Sistema de sonido MEJORADO con gestión de contexto de audio
+        const Sounds = {
+            audioContext: null,
+            sounds: {},
+            
+            init() {
+                // Crear objetos Audio para cada sonido
+                this.sounds = {
+                    correct: new Audio('https://github.com/ManuelVS8/Efectos_audio/blob/7b86808e254100aeaba6285b3e0b82650ae78055/Correcto.mp3?raw=true'),
+                    error: new Audio('https://github.com/ManuelVS8/Efectos_audio/blob/7b86808e254100aeaba6285b3e0b82650ae78055/Error.mp3?raw=true'),
+                    completed: new Audio('https://github.com/ManuelVS8/Efectos_audio/blob/7b86808e254100aeaba6285b3e0b82650ae78055/Completado.mp3?raw=true'),
+                    victory: new Audio('https://github.com/ManuelVS8/Efectos_audio/blob/7b86808e254100aeaba6285b3e0b82650ae78055/Termin%C3%A9.mp3?raw=true'),
+                    tap: new Audio('https://github.com/ManuelVS8/Efectos_audio/blob/37b3eb2da9c15c04dfb71dfe1be60f088ea3cdfc/Tap.mp3?raw=true')
+                };
 
-        function reproducirSonidoError() {
-            if (soundEnabled && audioInitialized) {
-                audioError.currentTime = 0;
-                audioError.play().catch(e => console.error("Error al reproducir sonido de error:", e));
-            }
-        }
+                // Configurar propiedades de los audios
+                Object.values(this.sounds).forEach(audio => {
+                    audio.preload = 'auto';
+                    audio.volume = 0.7;
+                });
 
-        function reproducirSonidoTap() {
-            if (soundEnabled && audioInitialized) {
-                audioTap.currentTime = 0;
-                audioTap.play().catch(e => console.error("Error al reproducir sonido tap:", e));
-            }
-        }
+                console.log("Sistema de audio inicializado");
+            },
 
-        // Función para inicializar audio en el primer clic del usuario
-        function initAudio() {
-            if (!audioInitialized) {
-                // Crear un contexto de audio para desbloquear la reproducción
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                audioContext.resume();
+            initAudioContext() {
+                if (!this.audioContext) {
+                    try {
+                        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        console.log("AudioContext creado:", this.audioContext.state);
+                    } catch (e) {
+                        console.error("Error al crear AudioContext:", e);
+                    }
+                }
+
+                // Reanudar el contexto si está suspendido
+                if (this.audioContext && this.audioContext.state === 'suspended') {
+                    this.audioContext.resume().then(() => {
+                        console.log("AudioContext reanudado exitosamente");
+                        gameState.audioInitialized = true;
+                    }).catch(e => {
+                        console.error("Error al reanudar AudioContext:", e);
+                    });
+                } else {
+                    gameState.audioInitialized = true;
+                }
+            },
+
+            play(soundName) {
+                if (!gameState.soundEnabled) return;
+
+                // Inicializar el contexto de audio si no está listo
+                if (!gameState.audioInitialized) {
+                    this.initAudioContext();
+                }
+
+                const audio = this.sounds[soundName];
+                if (!audio) {
+                    console.error(`Sonido '${soundName}' no encontrado`);
+                    return;
+                }
+
+                // Reiniciar el audio y reproducir
+                audio.currentTime = 0;
+                audio.play()
+                    .then(() => {
+                        console.log(`Sonido '${soundName}' reproducido correctamente`);
+                    })
+                    .catch(e => {
+                        console.warn(`No se pudo reproducir '${soundName}':`, e.message);
+                        // Intentar inicializar el contexto de audio de nuevo
+                        this.initAudioContext();
+                    });
+            },
+            
+            playCorrect() {
+                this.play('correct');
+            },
+            
+            playError() {
+                this.play('error');
+            },
+            
+            playCompleted() {
+                this.play('completed');
+            },
+            
+            playVictory() {
+                this.play('victory');
+            },
+            
+            playTap() {
+                this.play('tap');
+            },
+            
+            toggle() {
+                gameState.soundEnabled = !gameState.soundEnabled;
                 
-                // Cargar los audios
-                audioCorrecto.load();
-                audioError.load();
-                audioTap.load();
+                // Actualizar icono del botón de sonido
+                const soundIcon = gameState.soundEnabled ? 
+                    `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>` :
+                    `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>`;
                 
-                audioInitialized = true;
+                if (elements.fixedSoundBtn) {
+                    elements.fixedSoundBtn.innerHTML = soundIcon;
+                }
+                
+                console.log("Sonido", gameState.soundEnabled ? "activado" : "desactivado");
+                this.playTap();
+            }
+        };
+
+        // Función para desbloquear audio con la primera interacción
+        function unlockAudio() {
+            if (!gameState.audioInitialized) {
+                Sounds.initAudioContext();
             }
         }
 
-        // Función para alternar el sonido
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundToggle').textContent = soundEnabled ? '🔊' : '🔇';
-            reproducirSonidoTap();
-        }
-
-        // Añadir evento de clic al botón de sonido
-        document.getElementById('soundToggle').addEventListener('click', toggleSound);
+        // Añadir listeners para desbloquear audio
+        document.addEventListener('click', unlockAudio, { once: true });
+        document.addEventListener('touchstart', unlockAudio, { once: true });
+        document.addEventListener('keydown', unlockAudio, { once: true });
 
         function generateRandomNumber(digits) {
             var min = Math.pow(10, digits - 1);
@@ -1365,13 +1603,12 @@
             var num1, num2;
             var hasCarry = false;
             var attempts = 0;
+            var carryCount = 0;
 
-            // Bucle para asegurar al menos una "llevada"
-            while (!hasCarry && attempts < 100) {
-                num1 = generateRandomNumber(maxDigits);
-                num2 = generateRandomNumber(maxDigits);
+            while ((carryCount < 2 || !hasCarry) && attempts < 100) {
+                num1 = generateRandomNumber(DIGITS);
+                num2 = generateRandomNumber(DIGITS);
 
-                // Asegurar minuendo > sustraendo
                 if (num1 < num2) {
                     var temp = num1;
                     num1 = num2;
@@ -1379,18 +1616,19 @@
                 }
 
                 var mStr = num1.toString();
-                var sStr = num2.toString().padStart(maxDigits, '0');
+                var sStr = num2.toString().padStart(DIGITS, '0');
 
                 hasCarry = false;
+                carryCount = 0;
                 var currentCarry = 0;
 
-                // Verificar llevadas de derecha a izquierda
-                for (var i = maxDigits - 1; i >= 0; i--) {
+                for (var i = DIGITS - 1; i >= 0; i--) {
                     var mDigit = parseInt(mStr[i]);
                     var sDigit = parseInt(sStr[i]) + currentCarry;
                     
                     if (mDigit < sDigit) {
                         hasCarry = true;
+                        carryCount++;
                         currentCarry = 1; 
                     } else {
                         currentCarry = 0;
@@ -1402,8 +1640,7 @@
             minuend = num1.toString();
             subtrahend = num2.toString();
 
-            // Opción de reserva
-            if (!hasCarry) {
+            if (carryCount < 2) {
                 minuend = '65432';
                 subtrahend = '18765';
             }
@@ -1417,21 +1654,18 @@
         function init() {
             generateNewOperation(); 
             renderNumberBank();
+            Sounds.init();
         }
 
-        function toggleHelp() {
-            initAudio(); // Inicializar audio en el primer clic
-            reproducirSonidoTap();
-            var helpBox = document.getElementById('helpBox');
-            var buttonText = document.getElementById('helpButtonText');
-            helpBox.classList.toggle('visible');
-            buttonText.textContent = helpBox.classList.contains('visible') ? 'Ocultar ayuda' : 'Mostrar ayuda';
+        function toggleHelpModal() {
+            elements.helpModal.classList.toggle('active');
+            Sounds.playTap();
         }
 
         function renderOperation() {
             var numDigits = Math.max(minuend.length, subtrahend.length);
             
-            var minuendRow = document.getElementById('minuendRow');
+            var minuendRow = elements.minuendRow;
             minuendRow.innerHTML = '';
             var paddedMinuend = minuend.padStart(numDigits, '0');
             for (var i = 0; i < numDigits; i++) {
@@ -1441,7 +1675,7 @@
                 minuendRow.appendChild(div);
             }
 
-            var subtrahendRow = document.getElementById('subtrahendRow');
+            var subtrahendRow = elements.subtrahendRow;
             subtrahendRow.innerHTML = '<div class="digit-box">−</div>';
             var paddedSubtrahend = subtrahend.padStart(numDigits, '0');
             for (var i = 0; i < numDigits; i++) {
@@ -1462,7 +1696,7 @@
                 subtrahendRow.appendChild(div);
             }
 
-            var lineRow = document.getElementById('lineRow');
+            var lineRow = elements.lineRow;
             lineRow.innerHTML = '<div class="digit-box"></div>';
             for (var i = 0; i < numDigits; i++) {
                 var div = document.createElement('div');
@@ -1470,13 +1704,13 @@
                 lineRow.appendChild(div);
             }
 
-            var answerRow = document.getElementById('answerRow');
+            var answerRow = elements.answerRow;
             answerRow.innerHTML = '<div class="digit-box"></div>';
             for (var i = 0; i < numDigits; i++) {
-                var reverseIdx = numDigits - 1 - i; // Índice de columna: 0 (unidades), 1 (decenas)...
+                var reverseIdx = numDigits - 1 - i;
                 var div = document.createElement('div');
                 div.className = 'answer-box';
-                div.id = 'ans-' + i; // i es el índice de renderizado (0=izquierda)
+                div.id = 'ans-' + i;
                 
                 if (currentColumn === reverseIdx && gameStarted && !isChecked) {
                     div.classList.add('current');
@@ -1501,25 +1735,68 @@
         }
 
         function renderNumberBank() {
-            var numbers = document.getElementById('numbers');
+            var numbers = elements.digitBank;
             numbers.innerHTML = '';
-            for (var i = 0; i <= 9; i++) {
-                var btn = document.createElement('button');
-                btn.className = 'number-btn';
-                btn.textContent = i;
-                btn.onclick = (function(num) {
-                    return function() {
-                        handleNumberClick(num);
-                    };
-                })(i);
-                numbers.appendChild(btn);
+            
+            var screenWidth = window.innerWidth;
+            var needsTwoLines = screenWidth < 400;
+            
+            if (needsTwoLines) {
+                var firstRow = document.createElement('div');
+                firstRow.style.display = 'flex';
+                firstRow.style.justifyContent = 'center';
+                firstRow.style.gap = '10px';
+                firstRow.style.marginBottom = '10px';
+                firstRow.style.width = '100%';
+                
+                var secondRow = document.createElement('div');
+                secondRow.style.display = 'flex';
+                secondRow.style.justifyContent = 'center';
+                secondRow.style.gap = '10px';
+                secondRow.style.width = '100%';
+                
+                for (var i = 0; i <= 4; i++) {
+                    var btn = document.createElement('button');
+                    btn.className = 'digit-btn';
+                    btn.textContent = i;
+                    btn.onclick = (function(num) {
+                        return function() {
+                            handleNumberClick(num);
+                        };
+                    })(i);
+                    firstRow.appendChild(btn);
+                }
+                
+                for (var i = 5; i <= 9; i++) {
+                    var btn = document.createElement('button');
+                    btn.className = 'digit-btn';
+                    btn.textContent = i;
+                    btn.onclick = (function(num) {
+                        return function() {
+                            handleNumberClick(num);
+                        };
+                    })(i);
+                    secondRow.appendChild(btn);
+                }
+                
+                numbers.appendChild(firstRow);
+                numbers.appendChild(secondRow);
+            } else {
+                for (var i = 0; i <= 9; i++) {
+                    var btn = document.createElement('button');
+                    btn.className = 'digit-btn';
+                    btn.textContent = i;
+                    btn.onclick = (function(num) {
+                        return function() {
+                            handleNumberClick(num);
+                        };
+                    })(i);
+                    numbers.appendChild(btn);
+                }
             }
         }
 
         function handleNumberClick(num) {
-            initAudio(); // Inicializar audio en el primer clic
-            reproducirSonidoTap();
-            
             if (isChecked) return;
             if (!gameStarted) {
                 gameStarted = true;
@@ -1528,24 +1805,35 @@
             var numDigits = Math.max(minuend.length, subtrahend.length);
             if (currentColumn >= numDigits) return; 
 
-            document.getElementById('feedback').classList.remove('visible');
+            elements.feedback.classList.remove('show');
             
             userAnswer[currentColumn] = num;
             
             if (currentColumn < numDigits - 1) {
                 showCarryQuestion = true;
+                showCarryPopup();
             } else {
                 currentColumn++;
             }
             
+            Sounds.playTap();
             renderOperation();
         }
 
+        function showCarryPopup() {
+            elements.carryPopup.classList.add('visible');
+            elements.digitBank.classList.add('hidden');
+        }
+
+        function hideCarryPopup() {
+            elements.carryPopup.classList.remove('visible');
+            elements.digitBank.classList.remove('hidden');
+        }
+
         function handleCarry(hasCarry) {
-            initAudio(); // Inicializar audio en el primer clic
-            reproducirSonidoTap();
-            
             if (isChecked) return;
+            
+            hideCarryPopup();
             
             if (hasCarry) {
                 var nextColumn = currentColumn + 1;
@@ -1557,39 +1845,46 @@
             showCarryQuestion = false;
             currentColumn++;
             
+            Sounds.playTap();
             renderOperation();
         }
 
         function deleteAnswer(idx) {
-            initAudio(); // Inicializar audio en el primer clic
-            reproducirSonidoTap();
-            
             if (isChecked) return;
             
             delete userAnswer[idx];
             delete carries[idx + 1];
             currentColumn = idx;
             showCarryQuestion = false;
-            isChecked = false; // Permitir al usuario corregir después de un chequeo fallido
-            document.getElementById('feedback').classList.remove('visible');
+            isChecked = false;
+            elements.feedback.classList.remove('show');
+            Sounds.playTap();
             renderOperation();
         }
 
-        function checkAnswer() {
-            initAudio(); // Inicializar audio en el primer clic
-            reproducirSonidoTap();
+        function backspace() {
+            if (isChecked) return;
             
+            var numDigits = Math.max(minuend.length, subtrahend.length);
+            for (var i = numDigits - 1; i >= 0; i--) {
+                if (userAnswer[i] !== undefined) {
+                    deleteAnswer(i);
+                    break;
+                }
+            }
+        }
+
+        function checkAnswer() {
             var numDigits = Math.max(minuend.length, subtrahend.length);
             var correctAnswerNum = parseInt(minuend) - parseInt(subtrahend);
             var correctAnswer = correctAnswerNum.toString().padStart(numDigits, '0');
             
-            // CORRECCIÓN: Reconstruir la respuesta del usuario correctamente
             var userResult = '';
             for (let i = 0; i < numDigits; i++) {
-                var columnIdx = numDigits - 1 - i; // Convertir de posición de visualización a índice de columna
+                var columnIdx = numDigits - 1 - i;
                 if (userAnswer[columnIdx] === undefined) {
-                    document.getElementById('feedback').textContent = 'Asegúrate de completar todos los dígitos antes de comprobar.';
-                    document.getElementById('feedback').className = 'feedback error visible';
+                    elements.feedback.textContent = 'Asegúrate de completar todos los dígitos antes de comprobar.';
+                    elements.feedback.className = 'feedback error show';
                     isChecked = false;
                     updateUI();
                     return;
@@ -1599,17 +1894,47 @@
             
             userResult = userResult.padStart(numDigits, '0'); 
             
-            var feedback = document.getElementById('feedback');
+            var answerBoxes = document.querySelectorAll('.answer-box');
+            
+            for (let i = 0; i < numDigits; i++) {
+                var columnIdx = numDigits - 1 - i;
+                var answerBox = document.getElementById('ans-' + i);
+                
+                if (userAnswer[columnIdx] == correctAnswer[i]) {
+                    answerBox.classList.add('correct');
+                } else {
+                    answerBox.classList.add('incorrect');
+                }
+            }
+
+            elements.checkBtn.style.display = 'none';
+            elements.deleteBtn.style.display = 'none';
 
             if (userResult === correctAnswer) {
-                feedback.textContent = '¡Excelente! La respuesta es correcta. 🎉';
-                feedback.className = 'feedback success visible';
-                reproducirSonidoCorrecto();
+                elements.feedback.textContent = `Correcto: ${correctAnswerNum}`;
+                elements.feedback.className = 'feedback success show';
+                Sounds.playCorrect();
+                
+                if (gameState.gameMode === 'infinite') {
+                    gameState.infiniteScore += 25;
+                    elements.infiniteScore.textContent = `Puntuación: ${gameState.infiniteScore}`;
+                } else if (gameState.gameMode === 'normal') {
+                    gameState.score += (100/3);
+                }
             } else {
-                var displayCorrectAnswer = correctAnswerNum.toString();
-                feedback.innerHTML = `Ups, revisa tu respuesta. La respuesta correcta es: <strong>${displayCorrectAnswer}</strong>.`;
-                feedback.className = 'feedback error visible';
-                reproducirSonidoError();
+                elements.feedback.textContent = `Incorrecto: ${correctAnswerNum}`;
+                elements.feedback.className = 'feedback error show';
+                Sounds.playError();
+            }
+            
+            // Siempre mostrar el botón continuar independientemente de si la respuesta es correcta o no
+            if (gameState.gameMode === 'normal') {
+                elements.continueBtn.style.display = 'flex';
+            } else if (gameState.gameMode === 'infinite') {
+                elements.continueBtn.style.display = 'flex';
+            } else if (gameState.gameMode === 'custom') {
+                elements.newOperationBtn.style.display = 'flex';
+                elements.homeBtn.style.display = 'flex';
             }
             
             isChecked = true;
@@ -1624,85 +1949,489 @@
             showCarryQuestion = false;
             gameStarted = false;
             isChecked = false;
-            document.getElementById('feedback').classList.remove('visible');
+            elements.feedback.classList.remove('show');
+            
+            var answerBoxes = document.querySelectorAll('.answer-box');
+            answerBoxes.forEach(box => {
+                box.classList.remove('correct', 'incorrect');
+            });
+            
+            elements.digitBank.style.display = 'flex';
+            
+            elements.checkBtn.style.display = 'flex';
+            elements.deleteBtn.style.display = 'flex';
+            
+            elements.continueBtn.style.display = 'none';
+            elements.newOperationBtn.style.display = 'none';
+            elements.homeBtn.style.display = 'none';
+            
             renderOperation();
-        }
-
-        function changeOperation() {
-            initAudio(); // Inicializar audio en el primer clic
-            reproducirSonidoTap();
-            
-            if (isChecked) {
-                alert("Por favor, termina o reinicia la operación actual antes de cambiarla.");
-                return;
-            }
-            
-            var newMinuend = prompt('Introduce el minuendo (número mayor):', minuend);
-            if (newMinuend === null) return; // Usuario canceló
-            
-            var newSubtrahend = prompt('Introduce el sustraendo (número menor):', subtrahend);
-            if (newSubtrahend === null) return; // Usuario canceló
-            
-            // Validar que sean números y que el minuendo sea mayor
-            var numMinuend = parseInt(newMinuend);
-            var numSubtrahend = parseInt(newSubtrahend);
-
-            if (isNaN(numMinuend) || isNaN(numSubtrahend)) {
-                alert('Error: Ambos valores deben ser números válidos.');
-                return;
-            }
-
-            if (numMinuend <= numSubtrahend) {
-                alert('Error: El minuendo debe ser mayor que el sustraendo.');
-                return;
-            }
-            
-            // Si todo es válido, actualizar la operación
-            minuend = newMinuend;
-            subtrahend = newSubtrahend;
-            
-            // Actualizar el máximo de dígitos según la operación más larga
-            maxDigits = Math.max(minuend.length, subtrahend.length);
-            
-            reset();
         }
 
         function updateUI() {
             var numDigits = Math.max(minuend.length, subtrahend.length);
-            var questionBox = document.getElementById('questionBox');
-            var numberBank = document.getElementById('numberBank');
-            var actionButtons = document.getElementById('actionButtons');
-            var checkButton = document.getElementById('checkButton');
-            var nextButton = document.getElementById('nextButton');
+            var checkButton = document.getElementById('checkBtn');
+            var nextButton = document.getElementById('continueBtn');
             
-            if (showCarryQuestion && !isChecked) {
-                questionBox.classList.add('visible');
-            } else {
-                questionBox.classList.remove('visible');
-            }
-            
-            if (!showCarryQuestion && currentColumn < numDigits && !isChecked) {
-                numberBank.classList.add('visible');
-            } else {
-                numberBank.classList.remove('visible');
-            }
-            
-            if (currentColumn >= numDigits && !showCarryQuestion) {
-                actionButtons.classList.add('visible');
-            } else {
-                actionButtons.classList.remove('visible');
-            }
-            
-            // Lógica de botones: solo se muestra "Siguiente" después de comprobar
             if (isChecked) {
-                checkButton.style.display = 'none';
-                nextButton.style.display = 'flex'; 
+                if (gameState.gameMode === 'custom') {
+                    checkButton.style.display = 'none';
+                    nextButton.style.display = 'none';
+                } else {
+                    checkButton.style.display = 'none';
+                    // El botón continuar siempre se mostrará cuando isChecked es true
+                    nextButton.style.display = 'flex';
+                }
             } else {
                 checkButton.style.display = 'flex';
                 nextButton.style.display = 'none';
             }
         }
 
+        function updateGameHeader(mode) {
+            elements.timer.style.display = 'none';
+            elements.infiniteScore.style.display = 'none';
+
+            if (mode === 'normal') {
+                elements.timer.style.display = 'block';
+            } else if (mode === 'infinite') {
+                elements.infiniteScore.style.display = 'block';
+            }
+        }
+
+        function startGame() {
+            Sounds.playTap();
+            
+            gameState.questions = [];
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.startTime = Date.now();
+            gameState.gameMode = 'normal';
+            gameState.infiniteScore = 0;
+            
+            DIGITS = 5;
+            
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(updateTimer, 1000);
+            
+            elements.startScreen.classList.remove('active');
+            elements.gameScreen.classList.add('active');
+            
+            elements.fixedSoundBtn.style.display = 'flex';
+            elements.fixedHelpBtn.style.display = 'flex';
+            
+            updateGameHeader('normal');
+            
+            elements.normalProgress.style.display = 'block';
+            elements.normalProgressBar.style.display = 'block';
+            elements.exitInfiniteBtn.style.display = 'none';
+            elements.minuendForm.classList.remove('visible');
+            elements.subtrahendForm.classList.remove('visible');
+            elements.newOperationBtn.style.display = 'none';
+            elements.homeBtn.style.display = 'none';
+            
+            elements.questionTitle.textContent = 'Realiza las siguientes restas con llevadas';
+            
+            elements.progressText.textContent = '1/3';
+            elements.progressFill.style.width = '33.33%';
+            
+            generateNewOperation();
+        }
+
+        function startCustomMode() {
+            Sounds.playTap();
+            
+            gameState.questions = [];
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.startTime = Date.now();
+            gameState.gameMode = 'custom';
+            gameState.infiniteScore = 0;
+            gameState.customMinuend = '';
+            gameState.customSubtrahend = '';
+            
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(updateTimer, 1000);
+            
+            elements.startScreen.classList.remove('active');
+            elements.gameScreen.classList.add('active');
+            
+            elements.fixedSoundBtn.style.display = 'flex';
+            elements.fixedHelpBtn.style.display = 'flex';
+            
+            updateGameHeader('custom');
+            
+            elements.normalProgress.style.display = 'none';
+            elements.normalProgressBar.style.display = 'none';
+            elements.exitInfiniteBtn.style.display = 'none';
+            elements.continueBtn.style.display = 'none';
+            
+            showMinuendForm();
+        }
+
+        function showMinuendForm() {
+            document.querySelector('.operation-wrapper').style.display = 'none';
+            elements.digitBank.style.display = 'none';
+            elements.checkBtn.style.display = 'none';
+            elements.deleteBtn.style.display = 'none';
+            elements.newOperationBtn.style.display = 'none';
+            elements.homeBtn.style.display = 'none';
+            
+            elements.questionTitle.textContent = 'Crea tu propia resta';
+            
+            elements.minuendForm.classList.add('visible');
+            elements.subtrahendForm.classList.remove('visible');
+            
+            elements.customMinuendInput.value = '';
+            setTimeout(() => {
+                elements.customMinuendInput.focus();
+            }, 100);
+        }
+
+        function acceptMinuend() {
+            var minuendValue = elements.customMinuendInput.value;
+            
+            if (minuendValue && parseInt(minuendValue) >= 10) {
+                gameState.customMinuend = minuendValue;
+                
+                elements.minuendForm.classList.remove('visible');
+                
+                showSubtrahendForm();
+                
+                Sounds.playTap();
+            } else {
+                elements.feedback.textContent = 'Por favor, introduce un minuendo válido (mínimo 10).';
+                elements.feedback.className = 'feedback error show';
+            }
+        }
+
+        function showSubtrahendForm() {
+            elements.subtrahendForm.classList.add('visible');
+            
+            elements.customSubtrahendInput.value = '';
+            setTimeout(() => {
+                elements.customSubtrahendInput.focus();
+            }, 100);
+        }
+
+        function acceptSubtrahend() {
+            var subtrahendValue = elements.customSubtrahendInput.value;
+            
+            if (subtrahendValue && parseInt(subtrahendValue) >= 1 && 
+                parseInt(gameState.customMinuend) > parseInt(subtrahendValue)) {
+                
+                gameState.customSubtrahend = subtrahendValue;
+                
+                elements.subtrahendForm.classList.remove('visible');
+                
+                minuend = gameState.customMinuend;
+                subtrahend = gameState.customSubtrahend;
+                
+                elements.questionTitle.textContent = 'Realiza las siguientes restas con llevadas';
+                
+                document.querySelector('.operation-wrapper').style.display = 'flex';
+                elements.checkBtn.style.display = 'flex';
+                elements.deleteBtn.style.display = 'flex';
+                
+                reset();
+                
+                Sounds.playTap();
+            } else {
+                elements.feedback.textContent = 'Error: El sustraendo debe ser menor que el minuendo. Introduce valores correctos.';
+                elements.feedback.className = 'feedback error show';
+            }
+        }
+
+        function showCustomOperationForm() {
+            elements.feedback.classList.remove('show');
+
+            gameState.customMinuend = '';
+            gameState.customSubtrahend = '';
+            
+            elements.newOperationBtn.style.display = 'none';
+            elements.homeBtn.style.display = 'none';
+            
+            showMinuendForm();
+        }
+
+        function startInfiniteMode() {
+            Sounds.playTap();
+            
+            gameState.questions = [null];
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.startTime = Date.now();
+            gameState.gameMode = 'infinite';
+            gameState.infiniteScore = 0;
+            
+            DIGITS = 5;
+            
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.timerInterval = setInterval(updateTimer, 1000);
+            
+            elements.finalScreen.classList.remove('active');
+            elements.gameScreen.classList.add('active');
+            
+            elements.fixedSoundBtn.style.display = 'flex';
+            elements.fixedHelpBtn.style.display = 'flex';
+            
+            updateGameHeader('infinite');
+            
+            elements.normalProgress.style.display = 'none';
+            elements.normalProgressBar.style.display = 'none';
+            elements.exitInfiniteBtn.style.display = 'inline-block';
+            elements.minuendForm.classList.remove('visible');
+            elements.subtrahendForm.classList.remove('visible');
+            elements.newOperationBtn.style.display = 'none';
+            elements.homeBtn.style.display = 'none';
+            
+            elements.questionTitle.textContent = 'Realiza las siguientes restas con llevadas';
+            
+            document.querySelector('.operation-wrapper').style.display = 'flex';
+            elements.digitBank.style.display = 'flex';
+            
+            elements.infiniteScore.textContent = `Puntuación: 0`;
+            
+            generateNewOperation();
+        }
+
+        function exitInfiniteMode() {
+            Sounds.playTap();
+            
+            clearInterval(gameState.timerInterval);
+            
+            resetAllGameState();
+            
+            elements.gameScreen.classList.remove('active');
+            elements.startScreen.classList.add('active');
+        }
+
+        function goToStartScreen() {
+            Sounds.playTap();
+            
+            clearInterval(gameState.timerInterval);
+            
+            resetAllGameState();
+            
+            elements.gameScreen.classList.remove('active');
+            elements.startScreen.classList.add('active');
+        }
+
+        function resetAllGameState() {
+            userAnswer = {};
+            carries = {};
+            currentColumn = 0;
+            showCarryQuestion = false;
+            gameStarted = false;
+            isChecked = false;
+            
+            gameState.questions = [];
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.startTime = null;
+            gameState.gameMode = 'normal';
+            gameState.infiniteScore = 0;
+            gameState.customMinuend = '';
+            gameState.customSubtrahend = '';
+            
+            elements.feedback.classList.remove('show');
+            elements.minuendForm.classList.remove('visible');
+            elements.subtrahendForm.classList.remove('visible');
+            elements.checkBtn.style.display = 'flex';
+            elements.deleteBtn.style.display = 'flex';
+            elements.continueBtn.style.display = 'none';
+            elements.newOperationBtn.style.display = 'none';
+            elements.homeBtn.style.display = 'none';
+            elements.exitInfiniteBtn.style.display = 'none';
+            
+            if (elements.fixedSoundBtn) {
+                elements.fixedSoundBtn.style.display = 'none';
+            }
+            if (elements.fixedHelpBtn) {
+                elements.fixedHelpBtn.style.display = 'none';
+            }
+            
+            var answerBoxes = document.querySelectorAll('.answer-box');
+            answerBoxes.forEach(box => {
+                box.classList.remove('correct', 'incorrect');
+            });
+            
+            elements.digitBank.style.display = 'flex';
+            
+            elements.questionTitle.textContent = 'Realiza las siguientes restas con llevadas';
+            
+            document.querySelector('.operation-wrapper').style.display = 'flex';
+        }
+
+        function nextQuestion() {
+            Sounds.playTap();
+            
+            if (gameState.gameMode === 'normal') {
+                gameState.currentQuestionIndex++;
+                
+                elements.progressText.textContent = `${gameState.currentQuestionIndex + 1}/3`;
+                elements.progressFill.style.width = `${((gameState.currentQuestionIndex + 1) / 3) * 100}%`;
+                
+                if (gameState.currentQuestionIndex < 3) {
+                    generateNewOperation();
+                } else {
+                    endGame();
+                }
+            } else if (gameState.gameMode === 'infinite') {
+                generateNewOperation();
+            }
+        }
+
+        function updateTimer() {
+            if (!gameState.startTime) return;
+            
+            const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            
+            elements.timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function endGame() {
+            clearInterval(gameState.timerInterval);
+            
+            const score = Math.round(gameState.score);
+            
+            const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            const timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            elements.gameScreen.classList.remove('active');
+            elements.finalScreen.classList.add('active');
+            
+            if (elements.fixedSoundBtn) {
+                elements.fixedSoundBtn.style.display = 'none';
+            }
+            if (elements.fixedHelpBtn) {
+                elements.fixedHelpBtn.style.display = 'none';
+            }
+            
+            elements.finalScore.textContent = score;
+            elements.finalTime.textContent = `Tiempo: ${timeStr}`;
+            
+            if (score === 100) {
+                elements.finalMessage.textContent = '¡Perfecto! Has logrado la máxima puntuación!';
+                elements.trophyContainer.classList.add('show');
+                elements.finalScore.classList.add('perfect');
+                
+                createConfetti();
+                
+                // Reproducir sonido de victoria cuando la puntuación es exactamente 100
+                Sounds.playVictory();
+            } else {
+                elements.trophyContainer.classList.remove('show');
+                elements.finalScore.classList.remove('perfect');
+                elements.finalMessage.textContent = '¡Repasa un poco y sigue practicando!';
+                
+                Sounds.playCompleted();
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#d946ef', '#ff9f43', '#3b82f6', '#10b981', '#facc15'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = `${Math.random() * 10 + 5}px`;
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.opacity = Math.random() * 0.5 + 0.5;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 30);
+            }
+        }
+
+        function restartGame() {
+            Sounds.playTap();
+            
+            resetAllGameState();
+            
+            elements.finalScreen.classList.remove('active');
+            elements.startScreen.classList.add('active');
+        }
+
+        function toggleSound() {
+            Sounds.toggle();
+        }
+
+        // Soporte de teclado
+        document.addEventListener('keydown', (e) => {
+            if (!elements.gameScreen.classList.contains('active')) return;
+            
+            if (elements.minuendForm.classList.contains('visible')) {
+                if (e.key === 'Enter') {
+                    acceptMinuend();
+                }
+                return;
+            }
+            
+            if (elements.subtrahendForm.classList.contains('visible')) {
+                if (e.key === 'Enter') {
+                    acceptSubtrahend();
+                }
+                return;
+            }
+            
+            if (e.key >= '0' && e.key <= '9') {
+                handleNumberClick(parseInt(e.key));
+            }
+            
+            if (e.key === 'Backspace') {
+                backspace();
+            }
+            
+            if (e.key === 'Enter') {
+                if (elements.checkBtn.style.display !== 'none') {
+                    checkAnswer();
+                } else if (elements.continueBtn.style.display !== 'none') {
+                    nextQuestion();
+                }
+            }
+            
+            if (e.key === 'Escape' && elements.helpModal.classList.contains('active')) {
+                toggleHelpModal();
+            }
+            
+            if (e.key === 'Escape' && elements.carryPopup.classList.contains('visible')) {
+                hideCarryPopup();
+            }
+        });
+
+        elements.helpModal.addEventListener('click', (e) => {
+            if (e.target === elements.helpModal) {
+                toggleHelpModal();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (elements.gameScreen.classList.contains('active')) {
+                renderNumberBank();
+            }
+        });
+
+        // Inicialización del juego
         init();
     </script>
 </body>
